@@ -4,7 +4,6 @@ import time
 import usb_hid
 import os
 from adafruit_hid.keyboard import Keyboard
-from adafruit_hid.keycode import Keycode
 
 from layouts.keyboard_layout_win_fr import KeyboardLayout as LayoutFR
 from layouts.keyboard_layout_win_de import KeyboardLayout as LayoutDE
@@ -12,11 +11,26 @@ from layouts.keyboard_layout_win_cz import KeyboardLayout as LayoutCZ
 from layouts.keyboard_layout_win_da import KeyboardLayout as LayoutDA
 from layouts.keyboard_layout_win_es import KeyboardLayout as LayoutES
 from layouts.keyboard_layout_win_hu import KeyboardLayout as LayoutHU
+from layouts.keyboard_layout_win_br import KeyboardLayout as LayoutBR
 from layouts.keyboard_layout_win_it import KeyboardLayout as LayoutIT
 from layouts.keyboard_layout_win_po import KeyboardLayout as LayoutPO
 from layouts.keyboard_layout_win_sw import KeyboardLayout as LayoutSW
 from layouts.keyboard_layout_win_tr import KeyboardLayout as LayoutTR
-from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as LayoutUS
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as LayoutUS #azerty
+
+from layouts.keycode_win_br import Keycode as KeycodeBR
+from layouts.keycode_win_cz import Keycode as KeycodeCZ
+from layouts.keycode_win_da import Keycode as KeycodeDA
+from layouts.keycode_win_de import Keycode as KeycodeDE
+from layouts.keycode_win_es import Keycode as KeycodeES
+from layouts.keycode_win_fr import Keycode as KeycodeFR
+from layouts.keycode_win_hu import Keycode as KeycodeHU
+from layouts.keycode_win_it import Keycode as KeycodeIT
+from layouts.keycode_win_po import Keycode as KeycodePO
+from layouts.keycode_win_sw import Keycode as KeycodeSW
+from layouts.keycode_win_tr import Keycode as KeycodeTR
+from layouts.keycode_win_uk import Keycode as KeycodeUK
+from adafruit_hid.keycode import Keycode as KeycodeUS
 
 print("Starting up...")
 time.sleep(3)
@@ -36,9 +50,15 @@ layouts = {
     "po": LayoutPO(kbd),
     "sw": LayoutSW(kbd),
     "tr": LayoutTR(kbd),
-    "us": LayoutUS(kbd)
+    "us": LayoutUS(kbd),
+    "br": LayoutBR(kbd)
+}
+keycodes = {
+    "fr": KeycodeFR,
+    "us": KeycodeUS
 }
 layout = "us"
+keycode = keycodes[layout]
 
 def flash_status():
     """Flash the onboard LED for visual feedback"""
@@ -68,31 +88,31 @@ def interpret_ducky_script(filename):
             elif command == 'GUI' and len(parts) > 1:
                 second_part = parts[1].upper()
                 if second_part == 'SPACE':  
-                    kbd.press(Keycode.GUI, Keycode.SPACE)
+                    kbd.press(keycode.GUI, keycode.SPACE)
                 elif second_part == 'TAB':  
-                    kbd.press(Keycode.GUI, Keycode.TAB)
+                    kbd.press(keycode.GUI, keycode.TAB)
                 elif second_part == 'C':    
-                    kbd.press(Keycode.GUI, Keycode.C)
+                    kbd.press(keycode.GUI, keycode.C)
                 elif second_part == 'V':    
-                    kbd.press(Keycode.GUI, Keycode.V)
+                    kbd.press(keycode.GUI, keycode.V)
                 elif second_part == 'A':    
-                    kbd.press(Keycode.GUI, Keycode.A)
+                    kbd.press(keycode.GUI, keycode.A)
                 elif second_part == 'S':    
-                    kbd.press(Keycode.GUI, Keycode.S)
+                    kbd.press(keycode.GUI, keycode.S)
                 elif second_part == 'Z':   
-                    kbd.press(Keycode.GUI, Keycode.Z)
+                    kbd.press(keycode.GUI, keycode.Z)
                 elif second_part == 'F':    
-                    kbd.press(Keycode.GUI, Keycode.F)
+                    kbd.press(keycode.GUI, keycode.F)
                 elif second_part == 'Q':    
-                    kbd.press(Keycode.GUI, Keycode.Q)
+                    kbd.press(keycode.GUI, keycode.Q)
                 elif second_part == 'W':    
-                    kbd.press(Keycode.GUI, Keycode.W)
+                    kbd.press(keycode.GUI, keycode.W)
                 else:
-                    kbd.press(Keycode.GUI)
+                    kbd.press(keycode.GUI)
                     send_string(parts[1])
                 kbd.release_all()
             elif command == 'ENTER':
-                kbd.press(Keycode.ENTER)
+                kbd.press(keycode.ENTER)
                 kbd.release_all()
             elif command == "LAYOUT" and len(parts) == 2:
                 desired_layout = parts[1].lower()
@@ -100,6 +120,7 @@ def interpret_ducky_script(filename):
                     raise Exception(f"Layout '{desired_layout}' not found in layouts {list(layouts.keys())}")
                 global layout
                 layout = desired_layout
+                keycode = keycodes[layout]
             time.sleep(0.1)
 
 def execute_ducky_scripts():
