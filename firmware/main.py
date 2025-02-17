@@ -48,7 +48,6 @@ def flash_status():
 
 def send_string(text):
     """Send a string as keyboard input"""
-    print(layout)
     layouts[layout].write(text)
 
 def interpret_ducky_script(filename):
@@ -96,8 +95,11 @@ def interpret_ducky_script(filename):
                 kbd.press(Keycode.ENTER)
                 kbd.release_all()
             elif command == "LAYOUT" and len(parts) == 2:
+                desired_layout = parts[1].lower()
+                if desired_layout not in list(layouts.keys()):
+                    raise Exception(f"Layout '{desired_layout}' not found in layouts {list(layouts.keys())}")
                 global layout
-                layout = parts[1].lower()
+                layout = desired_layout
             time.sleep(0.1)
 
 def execute_ducky_scripts():
