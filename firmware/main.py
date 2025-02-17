@@ -6,6 +6,18 @@ import os
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
 
+from layouts.keyboard_layout_win_fr import KeyboardLayout as LayoutFR
+from layouts.keyboard_layout_win_de import KeyboardLayout as LayoutDE
+from layouts.keyboard_layout_win_cz import KeyboardLayout as LayoutCZ
+from layouts.keyboard_layout_win_da import KeyboardLayout as LayoutDA
+from layouts.keyboard_layout_win_es import KeyboardLayout as LayoutES
+from layouts.keyboard_layout_win_hu import KeyboardLayout as LayoutHU
+from layouts.keyboard_layout_win_it import KeyboardLayout as LayoutIT
+from layouts.keyboard_layout_win_po import KeyboardLayout as LayoutPO
+from layouts.keyboard_layout_win_sw import KeyboardLayout as LayoutSW
+from layouts.keyboard_layout_win_tr import KeyboardLayout as LayoutTR
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as LayoutUS
+
 print("Starting up...")
 time.sleep(3)
 
@@ -13,6 +25,20 @@ status_led = digitalio.DigitalInOut(board.LED)
 status_led.direction = digitalio.Direction.OUTPUT
 
 kbd = Keyboard(usb_hid.devices)
+layouts = {
+    "fr": LayoutFR(kbd),
+    "de": LayoutDE(kbd),
+    "cz": LayoutCZ(kbd),
+    "da": LayoutDA(kbd),
+    "es": LayoutES(kbd),
+    "hu": LayoutHU(kbd),
+    "it": LayoutIT(kbd),
+    "po": LayoutPO(kbd),
+    "sw": LayoutSW(kbd),
+    "tr": LayoutTR(kbd),
+    "us": LayoutUS(kbd)
+}
+layout = "us"
 
 def flash_status():
     """Flash the onboard LED for visual feedback"""
@@ -22,18 +48,8 @@ def flash_status():
 
 def send_string(text):
     """Send a string as keyboard input"""
-    for char in text:
-        if char.isupper():
-            kbd.press(Keycode.SHIFT)
-        if char.isalpha():
-            kbd.press(getattr(Keycode, char.upper()))
-            kbd.release_all()
-        elif char == ' ':
-            kbd.press(Keycode.SPACE)
-            kbd.release_all()
-        else:
-            pass
-        time.sleep(0.1)
+    print(layout)
+    layouts[layout].write(text)
 
 def interpret_ducky_script(filename):
     """Interpret a DuckyScript file and execute commands"""
@@ -79,6 +95,9 @@ def interpret_ducky_script(filename):
             elif command == 'ENTER':
                 kbd.press(Keycode.ENTER)
                 kbd.release_all()
+            elif command == "LAYOUT" and len(parts) == 2:
+                global layout
+                layout = parts[1].lower()
             time.sleep(0.1)
 
 def execute_ducky_scripts():
@@ -115,4 +134,4 @@ def execute_ducky_scripts():
 print("BadUSB starting...")
 flash_status()  
 execute_ducky_scripts()
-print("BadUSB execution complete") 
+print("BadUSB execution complete")

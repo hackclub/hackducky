@@ -1,0 +1,1 @@
+Move the content of `firmware/lib` to `lib` on your pico/hackducky
