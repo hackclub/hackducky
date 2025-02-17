@@ -55,7 +55,17 @@ layouts = {
 }
 keycodes = {
     "fr": KeycodeFR,
-    "us": KeycodeUS
+    "de": KeycodeDE,
+    "cz": KeycodeCZ,
+    "da": KeycodeDA,
+    "es": KeycodeES,
+    "hu": KeycodeHU,
+    "it": KeycodeIT,
+    "po": KeycodePO,
+    "sw": KeycodeSW,
+    "tr": KeycodeTR,
+    "us": KeycodeUS,
+    "br": KeycodeBR
 }
 layout = "us"
 keycode = keycodes[layout]
