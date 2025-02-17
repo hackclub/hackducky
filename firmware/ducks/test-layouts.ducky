@@ -1,0 +1,11 @@
+REM This is just to test layouts
+REM It will write azerty with both US and FR layout
+
+LAYOUT fr
+STRING azerty
+
+LAYOUT us
+STRING azerty
+
+REM test error
+LAYOUT nothing
