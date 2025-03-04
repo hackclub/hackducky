@@ -1,6 +1,7 @@
 REM This is just to test the menu functions
 REM This opens Spotlight on macOS
 REM Test macOS keyboard shortcuts
+DEFAULT_DELAY 1000
 GUI SPACE
 DELAY 500
 STRING terminal

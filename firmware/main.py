@@ -62,6 +62,8 @@ def interpret_ducky_script(filename):
     """Interpret a DuckyScript file and execute commands"""
     try:
         with open(filename, 'r', encoding='utf-8-sig') as file:
+            default_delay = 0.2
+
             for line in file:
                 try:
                     line = line.strip()
@@ -112,7 +114,11 @@ def interpret_ducky_script(filename):
                         # Add delay after ENTER
                         time.sleep(0.5)
                         flash_status()
-                    time.sleep(0.2)  # Increased delay between commands
+                    elif command == 'DEFAULT_DELAY':
+                        print("setting DEFAULT_DELAY")
+                        default_delay = float(parts[1]) / 1000.0
+
+                    time.sleep(default_delay)  # Default is 0.2 but customizable
                 except Exception as line_error:
                     print(f"Error processing line '{line}': {str(line_error)}")
                     continue
