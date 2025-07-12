@@ -1,0 +1,121 @@
+REM ======== HackDucky Script: priv_guardian.txt ========
+REM Author: Devaansh Pathak
+REM Purpose: Deep privacy and telemetry hardening for Windows 10/11
+
+REM === STEP 1: Launch Admin PowerShell ===
+DELAY 1000
+GUI r
+DELAY 300
+STRING powershell Start-Process powershell -Verb runAs
+ENTER
+DELAY 3000
+ALT y
+DELAY 2000
+
+REM === STEP 2: Set Execution Policy ===
+STRING Set-ExecutionPolicy Bypass -Scope Process -Force
+ENTER
+
+REM === STEP 3: Download and Launch ShutUp10++ with Config ===
+STRING Invoke-WebRequest -Uri "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -OutFile "$env:TEMP\OOSU10.exe"
+ENTER
+DELAY 10000
+STRING Invoke-WebRequest -Uri "https://raw.githubusercontent.com/devaansh-pathak/HackDucky-Scripts/main/shutup10-config.cfg" -OutFile "$env:TEMP\oosu10-config.cfg"
+ENTER
+DELAY 8000
+STRING Start-Process "$env:TEMP\OOSU10.exe" -ArgumentList '/quiet','/applycfg:$env:TEMP\oosu10-config.cfg'
+ENTER
+DELAY 15000
+
+REM === STEP 4: Disable Telemetry Services ===
+STRING Stop-Service DiagTrack -Force
+ENTER
+STRING Stop-Service dmwappushservice -Force
+ENTER
+STRING Set-Service DiagTrack -StartupType Disabled
+ENTER
+STRING Set-Service dmwappushservice -StartupType Disabled
+ENTER
+
+REM === STEP 5: Disable Telemetry Scheduled Tasks ===
+STRING Get-ScheduledTask | Where-Object {$_.TaskName -like '*CEIP*' -or $_.TaskName -like '*Consolidator*'} | Disable-ScheduledTask
+ENTER
+
+REM === STEP 6: System-Wide Bloatware Removal ===
+STRING Get-AppxPackage | Remove-AppxPackage
+ENTER
+STRING Get-AppxProvisionedPackage -Online | Remove-AppxProvisionedPackage -Online -AllUsers
+ENTER
+
+REM === STEP 7: Disable Feedback, Speech, Advertising ID, Typing History ===
+STRING reg add "HKCU\Software\Microsoft\Siuf\Rules" /v NumberOfSIUFInPeriod /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\InputPersonalization" /v RestrictImplicitTextCollection /t REG_DWORD /d 1 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\InputPersonalization" /v RestrictImplicitInkCollection /t REG_DWORD /d 1 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v Enabled /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy" /v TailoredExperiencesWithDiagnosticDataEnabled /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack" /v AllowTelemetry /t REG_DWORD /d 0 /f
+ENTER
+
+REM === STEP 8: Disable Cortana and Web Search ===
+STRING reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v AllowCortana /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v BingSearchEnabled /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v CortanaConsent /t REG_DWORD /d 0 /f
+ENTER
+
+REM === STEP 9: Disable Suggested Apps and Store Auto Installs ===
+STRING reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SubscribedContent-338389Enabled /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v AutoDownload /t REG_DWORD /d 2 /f
+ENTER
+STRING reg add "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v DisableStoreApps /t REG_DWORD /d 1 /f
+ENTER
+
+REM === STEP 10: Firewall Blocking of Known Telemetry IPs ===
+STRING netsh advfirewall firewall add rule name="Block MS Telemetry" dir=out action=block remoteip=23.100.122.175 enable=yes
+ENTER
+STRING netsh advfirewall firewall add rule name="Block Watson" dir=out action=block remoteip=65.52.108.33 enable=yes
+ENTER
+STRING netsh advfirewall firewall add rule name="Block Vortex" dir=out action=block remoteip=191.232.139.254 enable=yes
+ENTER
+
+REM === STEP 11: Privacy-Friendly DNS ===
+STRING netsh interface ipv4 set dnsservers name="Wi-Fi" static 1.1.1.1 primary
+ENTER
+STRING netsh interface ipv4 add dnsservers name="Wi-Fi" 1.0.0.1 index=2
+ENTER
+
+REM === STEP 12: Install Brave, Simplewall, and BleachBit ===
+STRING choco install brave bleachbit simplewall -y
+ENTER
+DELAY 30000
+
+REM === STEP 13: Block Hosts with External File ===
+STRING Invoke-WebRequest -Uri "https://someonewhocares.org/hosts/hosts" -OutFile "$env:TEMP\hosts"
+ENTER
+STRING Copy-Item -Path "$env:TEMP\hosts" -Destination "C:\Windows\System32\drivers\etc\hosts" -Force
+ENTER
+
+REM === STEP 14: Disable Wi-Fi Sense and Location Tracking ===
+STRING reg add "HKLM\Software\Microsoft\WcmSvc\wifinetworkmanager\config" /v AutoConnectAllowedOEM /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy" /v Location /t REG_DWORD /d 0 /f
+ENTER
+
+REM === STEP 15: Final Cleanup and System Restore Point ===
+STRING Checkpoint-Computer -Description "Pre-Hardening Restore Point"
+ENTER
+DELAY 5000
+STRING Start-Process bleachbit
+ENTER
+DELAY 3000
+STRING shutdown /r /t 45 /c "HackDucky Privacy Guardian: Restarting in 45s"
+ENTER
+
+REM === END OF SCRIPT ===
