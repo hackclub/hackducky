@@ -1,0 +1,5 @@
+VAR x 1
+
+WHILE $x == 1
+    CTRL ALT DEL 
+END_WHILE

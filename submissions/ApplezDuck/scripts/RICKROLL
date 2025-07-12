@@ -1,0 +1,6 @@
+REM i hate coding on my phjone
+
+GUI r
+DELAY 500
+STRING msedge https://coolstuff.hackrland.dev
+ENTER
