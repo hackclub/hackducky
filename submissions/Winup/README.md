@@ -15,6 +15,8 @@ emailed to the attacker, then the machine restarts.
 - make an app password and put it in the password section
 - upload the .py file to an online hosting site
 - change the download link in the duckyscript (Winup.txt) to yours
+- Add your personal access token if you are using a private Github Repo (Recommended)
+- If you are using a publc service remove the personal access token section
 - Done!
 
 ---
