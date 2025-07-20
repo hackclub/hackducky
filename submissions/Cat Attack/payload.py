@@ -23,9 +23,10 @@ def cleanup() -> None:
     # Clean up some stuff
     # WIN + R history
     with reg.OpenKey(reg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU", 0, reg.KEY_SET_VALUE) as key:
+        i = 0
         while True:
             try:
-                i = 0
+
                 reg.DeleteValue(key, reg.EnumValue(key, i)[0])
                 i += 1
             except OSError:
