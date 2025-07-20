@@ -11,7 +11,7 @@ emailed to the attacker, then the machine restarts.
 ---
 
 ## Usage
-- Change the email to your email
+- Change the emails to your email
 - make an app password and put it in the password section
 - upload the .py file to an online hosting site
 - change the download link in the duckyscript (Winup.txt) to yours
