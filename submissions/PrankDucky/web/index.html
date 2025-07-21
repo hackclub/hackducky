@@ -5,44 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrankDucky</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <!-- Highlight.js CSS (choose a theme) -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 </head>
 <body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <header class="text-center mb-12">
             <h1 class="text-6xl font-bold text-white mb-4">
-                🦆 <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">PrankDucky</span>
+                <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">PrankDucky</span>
             </h1>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
-                Your ultimate collection of harmless pranks and fun scripts for the HackDucky device!
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                A collection of pranks for HackDucky (or USB Rubber Ducky).
             </p>
+            
+            <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm text-gray-300">Execution Delay (s)</label>
+                        <input 
+                            type="number" 
+                            id="globalDelay" 
+                            min="0" 
+                            step="100" 
+                            value="0" 
+                            class="w-24 px-3 py-2 text-sm bg-black/50 text-white border border-white/20 rounded focus:border-blue-400 focus:outline-none"
+                        />
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm text-gray-300">Add to Startup:</label>
+                        <input 
+                            type="checkbox" 
+                            id="globalStartup" 
+                            class="w-5 h-5 text-blue-600 bg-black/50 border-white/20 rounded focus:ring-blue-500 focus:ring-2"
+                        />
+                    </div>
+                </div>
+            </div>
         </header>
 
         <div id="loadingIndicator" class="text-center mb-8">
             <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
             <p class="text-white mt-2">Loading pranks...</p>
-        </div>
-
-        <div id="statsSection" class="bg-white/10 backdrop-blur-md rounded-lg p-6 mb-8 hidden">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-                <div>
-                    <div class="text-3xl font-bold text-yellow-400" id="prankCount">0</div>
-                    <div class="text-gray-300">Available Pranks</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-bold text-green-400" id="totalSize">0 KB</div>
-                    <div class="text-gray-300">Total Size</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-bold text-blue-400" id="serverUptime">0s</div>
-                    <div class="text-gray-300">Server Uptime</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-bold text-purple-400">Live</div>
-                    <div class="text-gray-300">Status</div>
-                </div>
-            </div>
         </div>
 
         <div id="errorSection" class="bg-red-500/20 border border-red-500/50 rounded-lg p-6 mb-8 hidden">
@@ -54,17 +56,13 @@
         </div>
 
         <section class="mb-12">
-            <h2 class="text-3xl font-bold text-white mb-8 text-center">Available Pranks</h2>
             <div id="pranksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             </div>
         </section>
     </div>
 
     
-    <!-- Highlight.js JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
-    <!-- JavaScript language support -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
     <script src="web/index.js"></script>
 </body>

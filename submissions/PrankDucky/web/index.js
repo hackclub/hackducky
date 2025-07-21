@@ -1,5 +1,11 @@
 let pranksData = [];
 
+function getGlobalOptions() {
+    const delay = parseInt(document.getElementById('globalDelay')?.value) || 0;
+    const addToStartup = document.getElementById('globalStartup')?.checked || false;
+    return { delay, addToStartup };
+}
+
 function createPrankCard(prank) {
     return `
         <div class="bg-white/10 backdrop-blur-md rounded-lg p-6 hover:bg-white/20 transition-all duration-300 border border-white/20">
@@ -65,12 +71,10 @@ function displayPranks(pranks) {
     container.innerHTML = pranks.map(createPrankCard).join('');
 }
 
-// Handle details toggle to auto-load code
 function handleCodeToggle(event, filename) {
     const details = event.target;
     const container = document.getElementById(`code-container-${filename}`);
     
-    // Only load if opening and hasn't been loaded yet
     if (details.open && container.innerHTML.includes('Click to load code')) {
         loadPrankCode(filename);
     }
@@ -81,28 +85,29 @@ async function loadPrankCode(filename) {
         const containerElement = document.getElementById(`code-container-${filename}`);
         containerElement.innerHTML = '<div class="text-xs text-gray-400 mb-2">Loading...</div>';
         
-        const response = await fetch(`http://localhost:3000/getPranks/${filename}`);
+        const { delay, addToStartup } = getGlobalOptions();
+        
+        const queryParams = new URLSearchParams({
+            delay: delay,
+            addToStartup: addToStartup
+        });
+        
+        const response = await fetch(`http://localhost:3000/getPranks/${filename}?${queryParams}`);
         const data = await response.json();
         
         if (!data.success) {
             throw new Error(data.error);
         }
         
-        // Only show JavaScript Code Section
         if (data.code) {
             const codeHtml = `
                 <div class="mb-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-sm font-medium text-yellow-400">🟨 JavaScript Code</h4>
-                        <button onclick="copyToClipboard(\`${escapeForTemplate(data.code)}\`)" class="text-xs text-blue-400 hover:text-blue-300">📋 Copy</button>
-                    </div>
                     <pre class="p-3 bg-black/50 rounded text-xs overflow-x-auto max-h-40 overflow-y-auto border border-yellow-500/20"><code class="javascript hljs">${escapeHtml(data.code)}</code></pre>
                 </div>
             `;
             
             containerElement.innerHTML = codeHtml;
             
-            // Apply syntax highlighting with Highlight.js
             if (typeof hljs !== 'undefined') {
                 const codeBlock = containerElement.querySelector('code');
                 hljs.highlightElement(codeBlock);
@@ -119,24 +124,35 @@ async function loadPrankCode(filename) {
 
 async function downloadPrank(filename) {
     try {
-        const response = await fetch(`/api/download/${filename}`);
+        const { delay, addToStartup } = getGlobalOptions();
         
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Download failed');
+        const queryParams = new URLSearchParams({
+            delay: delay,
+            addToStartup: addToStartup
+        });
+        
+        const response = await fetch(`http://localhost:3000/getPranks/${filename}?${queryParams}`);
+        const data = await response.json();
+        
+        if (!data.success) {
+            throw new Error(data.error);
         }
         
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        showNotification(`Downloaded ${filename}!`, 'success');
+        if (data.duckyScript) {
+            const blob = new Blob([data.duckyScript], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename.replace(/\.[^/.]+$/, '') + '.duck';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification(`Downloaded ${filename.replace(/\.[^/.]+$/, '') + '.duck'}!`, 'success');
+        } else {
+            showNotification("No DuckyScript available to download", "error");
+        }
     } catch (error) {
         showNotification(`Download failed: ${error.message}`, 'error');
     }
@@ -144,38 +160,44 @@ async function downloadPrank(filename) {
 
 async function copyCode(filename) {
     try {
-        const response = await fetch(`http://localhost:3000/getPranks/${filename}`);
+        const { delay, addToStartup } = getGlobalOptions();
+        
+        const queryParams = new URLSearchParams({
+            delay: delay * 1000,
+            addToStartup: addToStartup
+        });
+        
+        const response = await fetch(`http://localhost:3000/getPranks/${filename}?${queryParams}`);
         const data = await response.json();
         
         if (!data.success) {
             throw new Error(data.error);
         }
         
-        // Only copy the JavaScript code
-        if (data.code) {
-            await navigator.clipboard.writeText(data.code);
-            showNotification(`Copied ${filename} JavaScript code to clipboard!`, 'success');
+        if (data.duckyScript) {
+            await navigator.clipboard.writeText(data.duckyScript);
+            showNotification(
+                `Copied ${filename} DuckyScript to clipboard!`,
+                "success"
+            );
         } else {
-            showNotification('No JavaScript code available to copy', 'error');
+            showNotification("No DuckyScript available to copy", "error");
         }
     } catch (error) {
         showNotification(`Copy failed: ${error.message}`, 'error');
     }
 }
 
-// Helper function to escape HTML
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
 
-// Helper function to escape text for template literals
 function escapeForTemplate(text) {
     return text.replace(/`/g, '\\`').replace(/\$/g, '\\$').replace(/\\/g, '\\\\');
 }
 
-// Helper function to copy text to clipboard
 async function copyToClipboard(text) {
     try {
         await navigator.clipboard.writeText(text);
@@ -198,9 +220,7 @@ function hideError() {
     document.getElementById('errorSection').classList.add('hidden');
 }
 
-// Notification system
 function showNotification(message, type = 'info') {
-    // Create notification element if it doesn't exist
     let notificationContainer = document.getElementById('notification-container');
     if (!notificationContainer) {
         notificationContainer = document.createElement('div');
@@ -217,12 +237,10 @@ function showNotification(message, type = 'info') {
     
     notificationContainer.appendChild(notification);
     
-    // Animate in
     setTimeout(() => {
         notification.classList.remove('translate-x-full', 'opacity-0');
     }, 10);
     
-    // Auto remove after 3 seconds
     setTimeout(() => {
         notification.classList.add('translate-x-full', 'opacity-0');
         setTimeout(() => {

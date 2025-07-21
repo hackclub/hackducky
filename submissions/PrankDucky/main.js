@@ -37,10 +37,18 @@ function generatePowerShell(jsCode, options = {}) {
 
 function generateDuckyScript(payload) {
     return `
-WINDOWS r
 DELAY 1000
+WINDOWS r
+DELAY 500
+STRING powershell
+ENTER
+DELAY 4000 
 STRING ${payload}
-ENTER`;
+ENTER
+DELAY 500
+STRING exit
+ENTER 
+    `;
 }
 
 app.get('/pranks', async (req, res) => {
