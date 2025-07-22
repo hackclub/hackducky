@@ -92,7 +92,7 @@ async function loadPrankCode(filename) {
             addToStartup: addToStartup
         });
         
-        const response = await fetch(`http://localhost:3000/getPranks/${filename}?${queryParams}`);
+        const response = await fetch(`/getPranks/${filename}?${queryParams}`);
         const data = await response.json();
         
         if (!data.success) {
@@ -131,7 +131,7 @@ async function downloadPrank(filename) {
             addToStartup: addToStartup
         });
         
-        const response = await fetch(`http://localhost:3000/getPranks/${filename}?${queryParams}`);
+        const response = await fetch(`/getPranks/${filename}?${queryParams}`);
         const data = await response.json();
         
         if (!data.success) {
@@ -167,7 +167,7 @@ async function copyCode(filename) {
             addToStartup: addToStartup
         });
         
-        const response = await fetch(`http://localhost:3000/getPranks/${filename}?${queryParams}`);
+        const response = await fetch(`/getPranks/${filename}?${queryParams}`);
         const data = await response.json();
         
         if (!data.success) {
