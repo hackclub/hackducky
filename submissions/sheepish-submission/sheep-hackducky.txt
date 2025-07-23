@@ -1,0 +1,63 @@
+REM Open YouTube video and close browser after 15 seconds
+STRING https://www.youtube.com/watch?v=AjHZXKoeiMY
+ENTER
+DELAY 16000
+
+REM Download and start installing a custom cursor
+STRING https://www.rw-designer.com/cursor-download.php?id=102004
+ENTER
+DELAY 8000
+
+REM Run PowerShell script to set cursor
+WINDOWS r
+DELAY 500
+STRING powershell
+ENTER
+DELAY 1000
+
+STRING $cursorPath = "$env:USERPROFILE\\Downloads\\Rainbow Sheep Cursor.ani"
+ENTER
+STRING Set-ItemProperty -Path 'HKCU:\\Control Panel\\Cursors' -Name 'Arrow' -Value $cursorPath
+ENTER
+DELAY 500
+
+WINDOWS r
+DELAY 500
+STRING main.cpl
+ENTER
+ENTER
+DELAY 500
+
+
+REM Download and set sheep wallpaper using PowerShell
+WINDOWS r
+DELAY 500
+STRING powershell
+ENTER
+DELAY 1000
+STRING $imgUrl = "https://c4.wallpaperflare.com/wallpaper/128/114/404/adventure-animation-comedy-family-wallpaper-preview.jpg"
+ENTER
+STRING $localPath = "$env:USERPROFILE\\Downloads\\sheepswall.jpg"
+ENTER
+STRING Invoke-WebRequest -Uri $imgUrl -OutFile $localPath
+ENTER
+STRING $absolutePath = [System.IO.Path]::GetFullPath($localPath)
+ENTER
+STRING Add-Type @"
+ENTER
+STRING using System;
+ENTER
+STRING using System.Runtime.InteropServices;
+ENTER
+STRING public class Wallpaper {
+ENTER
+STRING   [DllImport("user32.dll",SetLastError=true)]
+ENTER
+STRING   public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+ENTER
+STRING }
+ENTER
+STRING "@
+ENTER
+STRING [Wallpaper]::SystemParametersInfo(20, 0, $absolutePath, 3)
+ENTER
