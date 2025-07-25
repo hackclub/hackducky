@@ -4,6 +4,12 @@
 > Use only in **authorized environments** such as personal VMs or CTF labs.
 
 ---
+---
+author: "greninja44"
+Total time spent: 5 hours
+---
+
+
 
 
 This project contains a Python-based **keylogger and screenshot logger**, designed for use in **ethical red team testing**. It logs keystrokes, captures active window titles, and optionally sends logs to a **Discord webhook** at a fixed interval.
