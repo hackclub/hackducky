@@ -16,7 +16,7 @@ Combined with a **USB Rubber Ducky / Flipper Zero** Ducky Script, it simulates a
 
 | File | Description |
 |------|-------------|
-| `screenshot_logger4.py` | Main keylogger & screenshot capture script |
+| `logger.py` | Main keylogger & screenshot capture script |
 | `payload.ducky` | Ducky Script to execute the payload from a known path |
 | `README.md` | This documentation |
 
