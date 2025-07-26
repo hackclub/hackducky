@@ -5,6 +5,7 @@
 
 ## Overview
 My remote access script can be loaded onto a USB Rubber Ducky or a similar device to gain remote access to any Windows computer. The script itself is very short and will execute quickly, allowing you to remove it within a few seconds. The rest of the script will run without the USB Rubber Ducky to finish the installation. You can then control the computer via Discord. A small amount of setup is required the first time you use this tool, check the [Installation](#Installation) section for more information.
+The script takes ~40 seconds to execute (for just the rubber ducky part)
 
 ## Commands
 * `.type <input>` - Types the input message on the client

