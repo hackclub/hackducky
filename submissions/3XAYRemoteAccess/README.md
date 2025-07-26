@@ -31,3 +31,7 @@ My remote access script can be loaded onto a USB Rubber Ducky or a similar devic
 4. Upload this file somewhere the script can download it
 5. Modify script.txt and replace the GitHub URL (under "Download install script") with the download URL for YOUR exe file
 6. You're done! Just load up the script.txt on your USB Rubber Ducky and have fun!
+
+## Case
+The case prints in 2 parts, the top and bottom. Print them out and then glue them together around the USB rubber ducky.
+Removal: To remove the case, break the 3D print (yeah I couldn't think of any other mounting mechanism that's compact + doesn't require screw holes in the PCB)
