@@ -1,5 +1,7 @@
 # HackDucky - New YSWS!
 
+> **Note:** The DOCS page for this project was created with partial assistance from AI for formatting and structure.
+
 The hackclub themed USB rubber ducky ! - Check out [hackducky](https://hackclub.slack.com/archives/C08B8HZBC85)
 
 # What is this?
