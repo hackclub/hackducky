@@ -28,6 +28,9 @@ try:
     LOG_FILE_PATH = "/debug.log"
     filehandler = FileHandler(LOG_FILE_PATH)
     logger.addHandler(filehandler)
+    import adafruit_datetime as datetime
+
+    logger.info(f"BOOT {datetime.datetime.now()}")
     programming_mode = False
 except:
     print("Debug mode active...")
