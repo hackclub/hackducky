@@ -353,7 +353,7 @@ try:
                     else:
                         out.append(lambda t=self.default_delay: self.delay(t))
 
-                elif command in MODIFIER_KEYS or SPECIAL_KEYS:
+                elif command in MODIFIER_KEYS or command in SPECIAL_KEYS:
                     keys = line
                     out.append(lambda k=keys: self.do_key(k))
 
