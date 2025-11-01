@@ -79,11 +79,9 @@ The cursor keys are used to navigate the cursor to a different position on the s
 
 > ### `UP` `DOWN` `LEFT` `RIGHT`
 >  
-> ### `UPARROW` `DOWNARROW` `LEFTARROW` `RIGHTARROW`
->  
 > ### `PAGEUP` `PAGEDOWN` `HOME` `END`
 >  
-> ### `INSERT` `DELETE` `DEL` `BACKSPACE`
+> ### `INSERT` `DELETE` `BACKSPACE`
 >  
 > ### `TAB`
 >  
