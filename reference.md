@@ -77,7 +77,7 @@ STRINGLN c
 
 The cursor keys are used to navigate the cursor to a different position on the screen.
 
-> ### `UP` `DOWN` `LEFT` `RIGHT`
+> ### `UP_ARROW` `DOWN_ARROW` `LEFT_ARROW` `RIGHT_ARROW`
 >  
 > ### `PAGE_UP` `PAGE_DOWN` `HOME` `END`
 >  
