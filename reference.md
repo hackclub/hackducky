@@ -79,7 +79,7 @@ The cursor keys are used to navigate the cursor to a different position on the s
 
 > ### `UP` `DOWN` `LEFT` `RIGHT`
 >  
-> ### `PAGEUP` `PAGEDOWN` `HOME` `END`
+> ### `PAGE_UP` `PAGE_DOWN` `HOME` `END`
 >  
 > ### `INSERT` `DELETE` `BACKSPACE`
 >  
@@ -95,9 +95,9 @@ System keys are primarily used by the operating system for special functions and
 >
 > ### `ESCAPE`
 >
-> ### `PAUSE` `BREAK`
+> ### `PAUSE`
 >
-> ### `PRINTSCREEN`
+> ### `PRINT_SCREEN`
 >
 > ### `MENU` `APP`
 >
@@ -164,11 +164,11 @@ INJECT_MOD WINDOWS
 
 Lock keys toggle the lock state (on or off) and typically change the interpretation of subsequent keypresses. For example, caps lock generally makes all subsequent letter keys appear in uppercase.
 
-> ### `CAPSLOCK`
+> ### `CAPS_LOCK`
 >
-> ### `NUMLOCK`
+> ### `NUM_LOCK`
 >
-> ### `SCROLLOCK`
+> ### `SCROLL_LOCK`
 
 # Delays
 ## DELAY
