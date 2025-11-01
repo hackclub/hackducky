@@ -1,0 +1,225 @@
+REM ======== HackDucky Script: web_stack_bomber.txt ========
+REM Author: Devaansh Pathak
+REM Purpose: Installs a full-stack web dev environment with MEVN, LAMP, Docker, WSL2, CI/CD, PM2, NGINX reverse proxy, Let's Encrypt, and sample MEVN files
+
+REM === STEP 1: Open Admin PowerShell ===
+DELAY 1000
+GUI r
+DELAY 300
+STRING powershell Start-Process powershell -Verb runAs
+ENTER
+DELAY 3000
+ALT y
+DELAY 1500
+
+REM === STEP 2: Set Execution Policy ===
+STRING Set-ExecutionPolicy Bypass -Scope Process -Force
+ENTER
+
+REM === STEP 3: Install Chocolatey ===
+STRING Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = 'Tls12'; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+ENTER
+DELAY 15000
+STRING refreshenv
+ENTER
+
+REM === STEP 4: Core Web Stack Tools ===
+STRING choco install vscode git nodejs-lts python3 php composer mysql mariadb nginx apache httpd -y
+ENTER
+DELAY 60000
+
+REM === STEP 5: Browsers + REST Tools ===
+STRING choco install googlechrome firefox brave postman insomnia -y
+ENTER
+DELAY 40000
+
+REM === STEP 6: Configure Git ===
+STRING git config --global user.name "HackDucky Developer"
+ENTER
+STRING git config --global user.email "dev@hackducky.dev"
+ENTER
+
+REM === STEP 7: MongoDB ===
+STRING choco install mongodb -y
+ENTER
+DELAY 20000
+STRING mkdir C:\data\db
+ENTER
+STRING Start-Process mongod
+ENTER
+
+REM === STEP 8: Frontend & API Generators ===
+STRING npm install -g @vue/cli express-generator create-react-app
+ENTER
+DELAY 20000
+
+REM === STEP 9: Dev Folders & Sample Apps ===
+STRING mkdir C:\WebProjects\MEVN_Stack
+ENTER
+STRING mkdir C:\WebProjects\LAMP_Stack
+ENTER
+STRING cd C:\WebProjects\MEVN_Stack
+ENTER
+STRING vue create client --default
+ENTER
+DELAY 30000
+STRING express server
+ENTER
+STRING cd ../LAMP_Stack && echo "<?php phpinfo(); ?>" > index.php
+ENTER
+
+REM === STEP 10: Apache + PHP ===
+STRING sc config Apache2.4 start= auto
+ENTER
+STRING net start Apache2.4
+ENTER
+
+REM === STEP 11: MySQL ===
+STRING sc config mysql start= auto
+ENTER
+STRING net start mysql
+ENTER
+
+REM === STEP 12: Docker + Compose ===
+STRING choco install docker-desktop -y
+ENTER
+DELAY 60000
+STRING wsl --set-default-version 2
+ENTER
+STRING docker --version
+ENTER
+STRING docker-compose --version
+ENTER
+
+REM === STEP 13: WSL2 + Ubuntu ===
+STRING dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+ENTER
+STRING dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+ENTER
+STRING wsl --install -d Ubuntu
+ENTER
+DELAY 30000
+STRING wsl --set-default-version 2
+ENTER
+STRING wsl echo "# HackDucky Dev WSL Mirror Installed"
+ENTER
+
+REM === STEP 14: Tunneling + Live Server ===
+STRING choco install ngrok -y
+ENTER
+STRING npm install -g localtunnel live-server serve
+ENTER
+DELAY 10000
+
+REM === STEP 15: Sample Docker Compose (LAMP) ===
+STRING mkdir C:\WebProjects\DockerStack
+ENTER
+STRING echo "version: '3.8'" > C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "services:" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "  web:" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "    image: php:apache" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "    volumes:" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "      - ./html:/var/www/html" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "    ports: [\"8080:80\"]" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "  db:" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "    image: mysql" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "    environment:" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+STRING echo "      MYSQL_ROOT_PASSWORD: example" >> C:\WebProjects\DockerStack\docker-compose.yml
+ENTER
+
+REM === STEP 16: GitHub CLI + Actions ===
+STRING choco install gh -y
+ENTER
+DELAY 15000
+STRING gh auth login
+ENTER
+STRING gh extension install github/gh-actions-cache
+ENTER
+STRING mkdir C:\WebProjects\.github\workflows
+ENTER
+STRING echo "name: Web Build" > C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "on: [push]" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "jobs:" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "  build:" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "    runs-on: ubuntu-latest" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "    steps:" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "    - uses: actions/checkout@v3" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "    - name: Setup Node.js" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "      uses: actions/setup-node@v3" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "      with: { node-version: '18' }" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+STRING echo "    - run: npm install && npm run build" >> C:\WebProjects\.github\workflows\ci.yml
+ENTER
+
+REM === STEP 17: Install PM2 ===
+STRING npm install -g pm2
+ENTER
+STRING pm2 startup
+ENTER
+STRING pm2 save
+ENTER
+
+REM === STEP 18: Add Sample MEVN Backend (Express) ===
+STRING mkdir C:\WebProjects\DockerMEVN\server
+ENTER
+STRING echo "const express = require('express');" > C:\WebProjects\DockerMEVN\server\index.js
+ENTER
+STRING echo "const mongoose = require('mongoose');" >> C:\WebProjects\DockerMEVN\server\index.js
+ENTER
+STRING echo "const cors = require('cors');" >> C:\WebProjects\DockerMEVN\server\index.js
+ENTER
+STRING echo "const app = express();" >> C:\WebProjects\DockerMEVN\server\index.js
+ENTER
+STRING echo "app.use(cors());" >> C:\WebProjects\DockerMEVN\server\index.js
+ENTER
+STRING echo "app.get('/', (req, res) => res.send('API is live'));" >> C:\WebProjects\DockerMEVN\server\index.js
+ENTER
+STRING echo "mongoose.connect('mongodb://mongo:27017/test').then(() => app.listen(5000, () => console.log('Server running')));" >> C:\WebProjects\DockerMEVN\server\index.js
+ENTER
+STRING echo "{\"name\":\"backend\", \"main\":\"index.js\", \"dependencies\":{\"express\":\"^4\",\"mongoose\":\"^6\",\"cors\":\"^2\"}}" > C:\WebProjects\DockerMEVN\server\package.json
+ENTER
+
+REM === STEP 19: Add Sample MEVN Frontend (Vue) ===
+STRING mkdir C:\WebProjects\DockerMEVN\client
+ENTER
+STRING echo "<template><h1>Vue App Connected!</h1></template>" > C:\WebProjects\DockerMEVN\client\App.vue
+ENTER
+STRING echo "<script>export default { name: 'App' }</script>" >> C:\WebProjects\DockerMEVN\client\App.vue
+ENTER
+STRING echo "import { createApp } from 'vue'; import App from './App.vue'; createApp(App).mount('#app');" > C:\WebProjects\DockerMEVN\client\main.js
+ENTER
+STRING echo "<!DOCTYPE html><html><body><div id='app'></div><script src='./main.js'></script></body></html>" > C:\WebProjects\DockerMEVN\client\index.html
+ENTER
+STRING echo "{\"name\":\"frontend\", \"main\":\"main.js\", \"dependencies\":{\"vue\":\"^3\"}}" > C:\WebProjects\DockerMEVN\client\package.json
+ENTER
+
+REM === STEP 20: Run Docker MEVN ===
+STRING cd C:\WebProjects\DockerMEVN
+ENTER
+STRING docker-compose up -d --build
+ENTER
+
+REM === STEP 21: Final Message ===
+STRING echo "✅ Full Web Dev Environment Setup Complete — MEVN, LAMP, Docker, CI, PM2, WSL2"
+ENTER
+
+REM === END OF SCRIPT ===

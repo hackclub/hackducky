@@ -1,0 +1,151 @@
+REM ======== HackDucky Script: sys_admin_essentials.txt ========
+REM Author: Devaansh Pathak
+REM Purpose: Deploys a complete elite-level sysadmin, Red Team, and DevOps terminal toolkit
+
+
+REM === STEP 1: Open Admin PowerShell ===
+DELAY 1000
+GUI r
+DELAY 300
+STRING powershell Start-Process powershell -Verb runAs
+ENTER
+DELAY 3000
+ALT y
+DELAY 1500
+
+REM === STEP 2: Execution Policy ===
+STRING Set-ExecutionPolicy Bypass -Scope Process -Force
+ENTER
+
+REM === STEP 3: Install Chocolatey + Refresh ===
+STRING Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = 'Tls12'; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+ENTER
+DELAY 10000
+STRING refreshenv
+ENTER
+
+REM === STEP 4: Install Admin & Recon Toolkits ===
+STRING choco install microsoft-windows-terminal powertoys sysinternals nmap curl wget openssh putty nircmd procexp processhacker -y
+ENTER
+DELAY 40000
+
+REM === STEP 5: Install WSL, Ubuntu, Linux Tools ===
+STRING dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+ENTER
+STRING dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+ENTER
+STRING wsl --install -d Ubuntu
+ENTER
+DELAY 30000
+
+REM === STEP 6: Install oh-my-posh, Nerd Fonts, and PS Modules ===
+STRING Install-Module oh-my-posh -Scope CurrentUser -Force
+ENTER
+STRING choco install nerd-fonts-fira-code -y
+ENTER
+DELAY 15000
+STRING Install-Module -Name Terminal-Icons -Repository PSGallery -Force
+ENTER
+STRING Install-Module PSReadLine -AllowClobber -Force
+ENTER
+
+REM === STEP 7: Configure Profile Aliases and Shell ===
+STRING if (!(Test-Path -Path $PROFILE)) { New-Item -ItemType File -Path $PROFILE -Force }
+ENTER
+STRING Add-Content -Path $PROFILE -Value "Import-Module Terminal-Icons"
+ENTER
+STRING Add-Content -Path $PROFILE -Value "Import-Module PSReadLine"
+ENTER
+STRING Add-Content -Path $PROFILE -Value "Set-Alias ll 'Get-ChildItem -Force'"
+ENTER
+STRING Add-Content -Path $PROFILE -Value "Set-Alias reload '. $PROFILE'"
+ENTER
+STRING Add-Content -Path $PROFILE -Value "oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/jandedobbeleer.omp.json' | Invoke-Expression"
+ENTER
+
+REM === STEP 8: Install and Configure VS Code ===
+STRING choco install vscode -y
+ENTER
+DELAY 15000
+STRING code --install-extension ms-vscode.powershell
+ENTER
+STRING code --install-extension ms-vscode.remote-wsl
+ENTER
+STRING code --install-extension ms-azuretools.vscode-docker
+ENTER
+STRING code --install-extension eamodio.gitlens
+ENTER
+STRING code --install-extension redhat.vscode-yaml
+ENTER
+STRING code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
+ENTER
+DELAY 10000
+
+REM === STEP 9: Infra + DevOps Tools ===
+STRING choco install terraform awscli azure-cli gh kubernetes-helm kubectl docker-cli -y
+ENTER
+DELAY 40000
+
+REM === STEP 10: NetSec & Monitoring Tools ===
+STRING choco install wireshark tcpview netcat fping fing -y
+ENTER
+DELAY 20000
+
+REM === STEP 11: Create Admin Workspace ===
+STRING mkdir C:\AdminToolkit
+ENTER
+STRING cd C:\AdminToolkit
+ENTER
+STRING echo "# Elite SysAdmin Toolkit Initialized by HackDucky" > README.txt
+ENTER
+STRING echo "Log - %DATE% %TIME%" >> init.log
+ENTER
+
+REM === STEP 12: Setup Scheduled Automation ===
+STRING schtasks /create /tn "DailyDiskCheck" /tr "powershell -Command 'Get-PSDrive C | Out-File C:\AdminToolkit\disk_report.txt'" /sc daily /st 06:00
+ENTER
+STRING schtasks /create /tn "NetStats" /tr "powershell -Command 'netstat -ano | Out-File C:\AdminToolkit\netstats.txt'" /sc hourly
+ENTER
+
+REM === STEP 13: Setup Basic Scripts ===
+STRING echo "Get-EventLog -LogName Security -Newest 100 | Out-File C:\AdminToolkit\security_logs.txt" > logs.ps1
+ENTER
+STRING echo "(Get-Process | Sort-Object CPU -Descending)[0..10] | Out-File C:\AdminToolkit\top_cpu_processes.txt" > cpu.ps1
+ENTER
+
+REM === STEP 14: Import External Custom Functions ===
+STRING Invoke-WebRequest -Uri "https://raw.githubusercontent.com/devaansh-pathak/HackDucky-Scripts/main/functions.ps1" -OutFile "$PROFILE.d\functions.ps1"
+ENTER
+STRING Add-Content -Path $PROFILE -Value ". $PROFILE.d\functions.ps1"
+ENTER
+
+REM === STEP 15: Windows Terminal JSON Customization ===
+STRING notepad %LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json
+ENTER
+DELAY 5000
+ALT f
+STRING x
+ENTER
+
+REM === STEP 16: Red Team Toolkit Installation ===
+STRING choco install metasploit wireshark bloodhound neo4j hashcat sqlmap -y
+ENTER
+DELAY 60000
+STRING mkdir C:\AdminToolkit\RedTeam
+ENTER
+STRING echo "# Red Team tools installed: Metasploit, BloodHound, SQLMap, Hashcat" > C:\AdminToolkit\RedTeam\README.txt
+ENTER
+STRING echo "Run Neo4j before BloodHound: neo4j console" >> C:\AdminToolkit\RedTeam\README.txt
+ENTER
+
+REM === STEP 17: Launch Tools and Display Message ===
+STRING Start-Process powershell
+ENTER
+STRING Start-Process wt
+ENTER
+STRING Start-Process code
+ENTER
+STRING echo "🔥 Red Team Toolkit + Admin Stack Deployed — restart recommended."
+ENTER
+
+REM === END OF SCRIPT ===

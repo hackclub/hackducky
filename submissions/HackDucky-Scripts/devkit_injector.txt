@@ -1,0 +1,199 @@
+REM ======== HackDucky Script: devkit_injector.txt ========
+REM Author: Devaansh Pathak
+REM Purpose: Sets up a complete developer workstation on Windows
+
+REM === STEP 1: Open Admin PowerShell ===
+DELAY 1000
+GUI r
+DELAY 300
+STRING powershell Start-Process powershell -Verb runAs
+ENTER
+DELAY 2500
+ALT y
+DELAY 2000
+
+REM === STEP 2: Set Execution Policy ===
+STRING Set-ExecutionPolicy Bypass -Scope Process -Force;
+ENTER
+
+REM === STEP 3: Install Chocolatey ===
+STRING iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+ENTER
+DELAY 20000
+
+REM === STEP 4: Install Core Dev Tools ===
+STRING choco install git nodejs python vscode -y
+ENTER
+DELAY 30000
+
+REM === STEP 5: Install Utilities ===
+STRING choco install curl wget 7zip notepadplusplus powertoys sysinternals -y
+ENTER
+DELAY 20000
+
+REM === STEP 6: Install Windows Terminal and WSL ===
+STRING choco install microsoft-windows-terminal -y
+ENTER
+DELAY 10000
+STRING dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+ENTER
+DELAY 5000
+STRING dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+ENTER
+DELAY 5000
+STRING wsl --install -d Ubuntu
+ENTER
+DELAY 30000
+
+REM === STEP 7: Install Docker ===
+STRING choco install docker-desktop -y
+ENTER
+DELAY 30000
+
+REM === STEP 8: Upgrade pip and install Python packages ===
+STRING pip install --upgrade pip
+ENTER
+DELAY 3000
+STRING pip install requests flask numpy pandas matplotlib jupyter rich
+ENTER
+DELAY 10000
+
+REM === STEP 9: Install Node Global Packages ===
+STRING npm install -g yarn nodemon http-server eslint typescript vite
+ENTER
+DELAY 8000
+
+REM === STEP 10: Configure Git ===
+STRING git config --global user.name "Devaansh"
+ENTER
+STRING git config --global user.email "you@example.com"
+ENTER
+STRING git config --global init.defaultBranch main
+ENTER
+STRING git config --global core.editor "code --wait"
+ENTER
+STRING git config --global alias.st status
+ENTER
+STRING git config --global alias.co checkout
+ENTER
+STRING git config --global alias.br branch
+ENTER
+STRING git config --global alias.cm "commit -m"
+ENTER
+STRING git config --global alias.lg "log --oneline --graph --all"
+ENTER
+
+REM === STEP 11: Create Project Structure ===
+STRING mkdir %userprofile%\Dev
+ENTER
+STRING mkdir %userprofile%\Dev\Playground
+ENTER
+STRING mkdir %userprofile%\Dev\Repos
+ENTER
+
+REM === STEP 12: Clone Starter Repos ===
+STRING cd %userprofile%\Dev\Repos
+ENTER
+STRING git clone https://github.com/devaansh-pathak/hello-world.git
+ENTER
+DELAY 8000
+
+REM === STEP 13: VS Code Extensions Install ===
+STRING code --install-extension ms-python.python
+ENTER
+STRING code --install-extension esbenp.prettier-vscode
+ENTER
+STRING code --install-extension dbaeumer.vscode-eslint
+ENTER
+STRING code --install-extension ms-azuretools.vscode-docker
+ENTER
+STRING code --install-extension ritwickdey.LiveServer
+ENTER
+DELAY 10000
+
+REM === STEP 14: Download VS Code Settings ===
+STRING curl -o %APPDATA%\Code\User\settings.json https://raw.githubusercontent.com/devaansh-pathak/vscode-settings/main/settings.json
+ENTER
+DELAY 4000
+
+REM === STEP 15: Generate SSH Key ===
+STRING ssh-keygen -t rsa -b 4096 -C "you@example.com"
+ENTER
+DELAY 2000
+STRING
+ENTER
+DELAY 2000
+STRING
+ENTER
+DELAY 2000
+STRING
+ENTER
+DELAY 2000
+STRING eval $(ssh-agent -s)
+ENTER
+STRING ssh-add %userprofile%\.ssh\id_rsa
+ENTER
+DELAY 3000
+
+REM === STEP 16: PowerShell Profile Config ===
+STRING notepad $PROFILE
+ENTER
+DELAY 2000
+STRING Set-Alias gs 'git status'
+ENTER
+STRING Set-Alias gc 'git commit'
+ENTER
+STRING Set-Alias gp 'git push'
+ENTER
+STRING function ll { Get-ChildItem -Force }
+ENTER
+STRING $host.ui.RawUI.WindowTitle = "DevShell 🧑‍💻"
+ENTER
+DELAY 2000
+ALT f
+STRING s
+ENTER
+ALT f
+STRING x
+ENTER
+
+REM === STEP 17: Create Hello World Project ===
+STRING cd %userprofile%\Dev\Playground
+ENTER
+STRING mkdir hello-python
+ENTER
+STRING cd hello-python
+ENTER
+STRING echo print("Hello from HackDucky!") > main.py
+ENTER
+STRING code .
+ENTER
+DELAY 5000
+
+REM === STEP 18: Create README and Git Init ===
+STRING echo # Hello from HackDucky > README.md
+ENTER
+STRING echo __pycache__/ > .gitignore
+ENTER
+STRING git init
+ENTER
+STRING git add .
+ENTER
+STRING git commit -m "Initial commit"
+ENTER
+
+REM === STEP 19: System Tweaks ===
+STRING reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add HKCU\Console /v ForceV2 /t REG_DWORD /d 1 /f
+ENTER
+STRING powercfg -setactive SCHEME_MIN
+ENTER
+STRING rundll32.exe user32.dll,LockWorkStation
+ENTER
+
+REM === STEP 20: Final Message ===
+STRING echo Your dev environment is ready. Happy hacking! 🦆
+ENTER
+
+REM === END OF SCRIPT ===
