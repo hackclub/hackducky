@@ -1,10 +1,14 @@
 # NOT IMPLEMENTED: BUTTON, ATTACKMODE, LED, $_RANDOM_MIN, $_RANDOM_MAX
 
 import digitalio
+import board
+
 print("Main.py: Starting up...")
 # Setup LED
 status_led = digitalio.DigitalInOut(board.LED)
 status_led.direction = digitalio.Direction.OUTPUT
+
+
 def flash_error():
     while True:
         status_led.value = True
@@ -31,22 +35,13 @@ except:
 
 
 try:
-    import board
     import time
     import usb_hid
     import os
     import time
     import random as rand
 
-    MODIFIER_KEYS = [
-        "CTRL",
-        "SHIFT",
-        "ALT",
-        "GUI",
-        "WINDOWS",
-        "COMMAND",
-        "CONTROL"
-    ]
+    MODIFIER_KEYS = ["CTRL", "SHIFT", "ALT", "GUI", "WINDOWS", "COMMAND", "CONTROL"]
 
     SPECIAL_KEYS = [
         "ENTER",
@@ -84,7 +79,7 @@ try:
         "F12",
         "CAPSLOCK",
         "NUMLOCK",
-        "SCROLLOCK"
+        "SCROLLOCK",
     ]
 
     from random_keystrokes import RANDOM_KEYSTROKES
@@ -112,11 +107,7 @@ try:
             return s
 
     class DuckyScriptCompiler:
-        def __init__(
-            self, layout, keyboard, keycode
-        ) -> (
-            None
-        ):  # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
+        def __init__(self, layout, keyboard, keycode) -> None:  # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
             self.layout = layout  # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
             self.keyboard = keyboard  # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
             self.keycode = keycode
@@ -274,8 +265,9 @@ try:
                     compiled_loop_body = self._compile_block(loop_body_lines)
 
                     # Create a single function that runs the entire loop
-                    loop_func = lambda ct=condition_tokens, body=compiled_loop_body: self._execute_while_loop(
-                        ct, body
+                    loop_func = (
+                        lambda ct=condition_tokens,
+                        body=compiled_loop_body: self._execute_while_loop(ct, body)
                     )
                     out.append(loop_func)
                     continue
@@ -333,7 +325,7 @@ try:
                         s = "".join(string)
                         logger.debug(f"END STRING block with value {s}")
                         out.append(lambda s=s: self.string(s))
-                
+
                 if command == "STRINGLN":
                     logger.debug(f"Processing STRINGLN statement at row {row} , {line}")
                     if len(line) >= 2:
@@ -463,9 +455,7 @@ try:
                 for i in range(len(line)):
                     if line[i] in RANDOM_KEYSTROKES:
                         random = RANDOM_KEYSTROKES[line[i]]()
-                        logger.debug(
-                            f"Replaced {line[i]} with {random} at row {row}"
-                        )
+                        logger.debug(f"Replaced {line[i]} with {random} at row {row}")
                         line[i] = random
                 out.append(" ".join(line))
             return out
@@ -483,8 +473,9 @@ try:
                 return self.var_table[token]
             elif token == "$_RANDOM_INT":
                 print(self.var_table["$_RANDOM_MIN"], self.var_table["$_RANDOM_MAX"])
-                return rand.randint(self.var_table["$_RANDOM_MIN"], self.var_table["$_RANDOM_MAX"])
-            
+                return rand.randint(
+                    self.var_table["$_RANDOM_MIN"], self.var_table["$_RANDOM_MAX"]
+                )
 
             # Then check for literals
             if token.upper() == "TRUE":
@@ -503,7 +494,7 @@ try:
 
         def evaluate_expression(self, tokens: list[str]) -> int | bool | None:
             """Evaluates expressions, including function calls."""
-            
+
             if len(tokens) == 1:
                 token = tokens[0]
                 # Check if it's a function call
@@ -657,7 +648,7 @@ try:
         def string(self, s: str) -> None:
             logger.debug(f"Writing {s} with HID device.")
             self.layout.write(s)
-        
+
         def stringln(self, s: str) -> None:
             logger.debug(f"Writing {s} with HID device.")
             self.layout.write(s + "\n")
@@ -690,7 +681,7 @@ try:
             var_name = line[0]
             if var_name not in self.var_table:
                 raise DuckyScriptError(f"Undefined variable '{var_name}'")
-            
+
             if len(line) > 2 and line[1] == "=":
                 value_tokens = line[2:]
                 self.var_table[var_name] = self.evaluate_expression(value_tokens)
@@ -712,7 +703,6 @@ try:
             exec = self.compile(lines)
             for func in exec:
                 func()
-
 
     def main():
         # Initialize keyboard right away if we're in payload mode
