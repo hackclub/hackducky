@@ -656,11 +656,13 @@ try:
             logger.debug(f"Sending the {keys} keys.")
             try:
                 if type(keys) == str:
+                    keys = keys.upper()
                     if keys == "CTRL":
                         keys = "CONTROL"
                     self.keyboard.press(getattr(self.keycode, keys))
                 else:
                     for key in keys:
+                        key = key.upper()
                         if key == "CTRL":
                             key = "CONTROL"
                         self.keyboard.press(getattr(self.keycode, key))
