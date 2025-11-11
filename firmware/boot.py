@@ -2,7 +2,6 @@ import board
 import digitalio
 import storage
 import usb_hid
-import time
 
 program_pin = digitalio.DigitalInOut(board.GP0)
 program_pin.direction = digitalio.Direction.INPUT
