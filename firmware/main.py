@@ -41,8 +41,8 @@ try:
     import time
     import usb_hid
     import os
-    import time
     import random as rand
+    from random_keystrokes import RANDOM_KEYSTROKES
 
     MODIFIER_KEYS = ["CTRL", "SHIFT", "ALT", "GUI", "WINDOWS", "COMMAND", "CONTROL"]
 
@@ -84,11 +84,11 @@ try:
         "SCROLL_LOCK",
     ]
 
-    from random_keystrokes import RANDOM_KEYSTROKES
-
     class DuckyScriptError(Exception):
         pass
 
+    # For programnubg mode
+    # ================================================================
     class PseudoKeyboard:
         def press(self, a):
             pass
@@ -108,10 +108,12 @@ try:
         def getattr(o, s):
             return s
 
+    # ================================================================
+
     class DuckyScriptCompiler:
-        def __init__(self, layout, keyboard, keycode) -> None:  # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
-            self.layout = layout  # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
-            self.keyboard = keyboard  # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
+        def __init__(self, layout, keyboard, keycode) -> None:
+            self.layout = layout
+            self.keyboard = keyboard
             self.keycode = keycode
             self.default_delay = 20
             self.var_table: dict[str, int | bool] = {}
@@ -340,7 +342,7 @@ try:
                         while n != "END_STRINGLN":
                             out.append(lambda s=n: self.stringln(s))
                             n = next(iterator)
-                        logger.debug(f"END STRINGLN block with value")
+                        logger.debug("END STRINGLN block with value")
 
                 elif command == "DELAY":
                     if len(line) > 1:
