@@ -87,7 +87,7 @@ try:
     class DuckyScriptError(Exception):
         pass
 
-    # For programnubg mode
+    # For programming mode
     # ================================================================
     class PseudoKeyboard:
         def press(self, a):
@@ -703,43 +703,54 @@ try:
             logger.debug(f"RETURN statement called with value: {value}")
 
         def run(self, filename: str):
+            print(f"Main.py: Running DuckyScript file: {filename}")
             with open(filename, "r") as f:
                 lines = f.readlines()
 
+            print(f"Main.py: Read {len(lines)} lines from {filename}")
             exec = self.compile(lines)
+            print(f"Main.py: Compiled {len(exec)} commands")
+            print("Main.py: Executing payload...")
             for func in exec:
                 func()
+            print("Main.py: Payload execution completed!")
 
-    def main():
-        # Initialize keyboard right away if we're in payload mode
-        try:
-            print("Main.py: Checking USB HID devices...")
-            if not usb_hid.devices:
-                print("Main.py: No USB HID devices found!")
-                flash_error()
-            else:
-                from layouts_manager import layouts, kbd, keycodes
+    # Initialize keyboard at module level
+    print("Main.py: Checking USB HID devices...")
+    if not usb_hid.devices:
+        print("Main.py: No USB HID devices found!")
+        flash_error()
+    else:
+        from layouts_manager import layouts, kbd, keycodes
+        print(f"Main.py: Found {len(usb_hid.devices)} HID devices")
+        print("Main.py: Keyboard initialized successfully")
+        
+        # Test keyboard initialization
+        kbd.release_all()
+        print("Main.py: Keyboard test successful")
 
-            print(f"Main.py: Found {len(usb_hid.devices)} HID devices")
-            print("Main.py: Keyboard initialized successfully")
-
-            # Test keyboard initialization
-            kbd.release_all()
-            print("Main.py: Keyboard test successful")
-
-        except Exception as e:
-            print(f"Main.py: Failed to initialize keyboard: {str(e)}")
-            flash_error()
-
+    # Main execution
+    print("Main.py: Looking for .ducky files...")
+    files = os.listdir("/ducks")
+    print(f"Main.py: Files in /ducks: {files}")
+    
+    ducky_files = sorted(["/ducks/" + f for f in files if (f.endswith(".ducky") or f.endswith(".ducky.txt")) and not f.startswith("._")])
+    print(f"Main.py: Found {len(ducky_files)} .ducky file(s): {ducky_files}")
+    
+    if ducky_files:
+        print(f"Main.py: Creating compiler...")
         compiler = DuckyScriptCompiler(layouts["us"], kbd, keycodes["us"])
-        files = os.listdir("/ducks")
-        ducky_files = sorted(["/ducks/" + f for f in files if f.endswith(".ducky")])
-        if ducky_files:
-            compiler.run(ducky_files[0])
-
-    if __name__ == "__main__":
-        main()
+        print(f"Main.py: Starting payload execution...")
+        compiler.run(ducky_files[0])
+    else:
+        print("Main.py: ERROR - No .ducky files found in /ducks directory!")
 
 except Exception as e:
+    print(f"Main.py: FATAL ERROR: {e}")
+    try:
+        import traceback
+        traceback.print_exception(type(e), e, e.__traceback__)
+    except:
+        pass  # traceback might not be available in CircuitPython
     logger.error(f"{e}")
     flash_error()
