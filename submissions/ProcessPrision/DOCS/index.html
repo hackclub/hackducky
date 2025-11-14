@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Documentation</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234ade80'><path d='M12 2L1 21h22L12 2zm0 4l7.53 13H4.47L12 6zm-1 5v4h2v-4h-2zm0 6v2h2v-2h-2z'/></svg>" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+
+<body class="bg-black text-green-400">
+
+    <!-- HEADER -->
+    <header
+        class="bg-gray-900 text-green-400 relative overflow-hidden min-h-screen flex flex-col justify-center items-center border-b-2 border-green-500">
+        <model-viewer src="IMGS/models/hackducky.glb" alt="3D model" auto-rotate camera-controls
+            camera-orbit="180deg 75deg auto" exposure="1.2" disable-zoom interaction-prompt="none"
+            environment-image="neutral" shadow-intensity="1" class="w-full h-[80vh] md:w-3/4 pointer-events-auto z-10">
+        </model-viewer>
+
+        <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center z-20 pointer-events-none">
+            <h1
+                class="text-5xl md:text-6xl font-extrabold tracking-wide text-center text-green-400 drop-shadow-xl bg-black/80 rounded-xl px-6 py-4 border border-green-500 font-mono">
+                ProcessPrison - A DuckyScript Project
+            </h1>
+        </div>
+
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500 opacity-80" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+    </header>
+
+    <div class="relative z-10">
+        <svg class="w-full h-16 md:h-24 text-black" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="currentColor" fill-opacity="1"
+                d="M0,224L48,213.3C96,203,192,181,288,165.3C384,149,480,139,576,144C672,149,768,171,864,181.3C960,192,1056,192,1152,186.7C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+        </svg>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex justify-center px-4 sm:px-8 md:px-16 py-10">
+        <div class="w-full max-w-4xl mx-auto">
+
+            <!-- Header Section -->
+            <header class="mb-8">
+                <h1 class="text-4xl font-bold mb-4 text-green-400 font-mono"># ProcessPrison Documentation</h1>
+                <p class="text-lg text-green-300 font-mono leading-relaxed mb-4">
+                    A comprehensive DuckyScript automation project designed for educational purposes, demonstrating system information collection, cross-platform compatibility.
+                </p>
+                <div class="bg-yellow-900/30 border border-yellow-500 rounded-lg p-4 mb-6">
+                    <h3 class="text-yellow-400 font-bold mb-2">🔒 Privacy & Security Notice</h3>
+                    <p class="text-yellow-300 text-sm">
+                        <strong>Educational purposes only.</strong> All collected information remains 100% local to the target machine. 
+                        No data is transmitted externally or stored on remote servers. This is a proof-of-concept for security research and education.
+                    </p>
+                </div>
+                <div class="text-sm text-green-500 font-mono mb-8">
+                    <span>Last updated: <time datetime="2025-07-27">July 27, 2025</time></span>
+                </div>
+                <hr class="border-green-500 mb-8">
+            </header>
+
+            <!-- Content Sections -->
+            <main class="space-y-12 font-mono text-green-300 leading-relaxed">
+
+                <!-- Core Features -->
+                <div class="pb-8 border-b border-green-800/50">
+                    <h2 class="text-2xl font-bold mb-4 text-green-400">## Core Features</h2>
+                    
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">🎯 System Analysis</h3>
+                    <p class="mb-5 text-lg">Cross-platform system information collection with real-time hardware detection, OS analysis, and dynamic HTML report generation in terminal-themed interface.</p>
+
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">🔊 Audio & Visual Effects</h3>
+                    <p class="mb-5 text-lg">Multi-pattern sound generation including mosquito buzz, alarm patterns, and chaos mode with invisible execution and immediate audio feedback.</p>
+
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">🛡️ Advanced Capabilities <span class="bg-blue-900/50 text-blue-300 text-xs px-2 py-1 rounded-full border border-blue-500 ml-2">Coming Soon</span></h3>
+                    <p class="mb-4 text-lg">Input monitoring, window control, process management, and escape attempt logging - all performed locally for educational analysis.</p>
+                </div>
+
+                <!-- Technical Implementation -->
+                <div class="pb-8 border-b border-green-800/50">
+                    <h2 class="text-2xl font-bold mb-4 text-green-400">## Technical Implementation</h2>
+                    
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">Architecture Overview</h3>
+                    <p class="mb-5 text-lg">Built on DuckyScript core with PowerShell backend, Python audio engine, HTML template system, and cross-platform detection capabilities.</p>
+
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">Key Components</h3>
+                    <div class="bg-gray-900/50 border border-green-500 rounded-lg p-4 mb-6">
+                        <p class="mb-2 text-lg"><strong class="text-green-400">File Structure:</strong></p>
+                        <p class="mb-2 text-sm">
+                            • <strong>payload.dd</strong> - Main DuckyScript execution file<br>
+                            • <strong>runsounds.py</strong> - Audio effects and sound generation<br>
+                        </p>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">Cross-Platform Support</h3>
+                    <p class="mb-4 text-lg">Full Windows 10/11 support with PowerShell integration, Linux compatibility using bash utilities, and automatic browser detection (Chrome/Firefox).</p>
+                </div>
+
+                <!-- Usage & Quick Start -->
+                <div class="pb-8 border-b border-green-800/50">
+                    <h2 class="text-2xl font-bold mb-4 text-green-400">## Quick Start Guide</h2>
+                    
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">Prerequisites</h3>
+                    <div class="bg-gray-900/50 border border-green-500 rounded-lg p-4 mb-5">
+                        <p class="text-sm">
+                            • Windows 10/11 or Linux system<br>
+                            • Python 3.7+ (for audio effects)<br>
+                            • PowerShell (Windows) or Bash (Linux)<br>
+                            • Chrome/Firefox browser
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ethical Guidelines -->
+                <div class="pb-8 border-b border-green-800/50">
+                    <h2 class="text-2xl font-bold mb-4 text-green-400">## Ethical Use Guidelines</h2>
+                    <div class="bg-red-900/20 border border-red-500 rounded-lg p-4 mb-4">
+                        <p class="text-red-300 text-lg mb-2"><strong>⚠️ Educational Use Only</strong></p>
+                        <p class="text-sm">
+                            This project is intended for security education, system analysis research, automation learning, and harmless demonstrations. 
+                            Please use responsibly and only on systems you own or have explicit permission to test.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Visual Documentation -->
+                <div class="pb-4">
+                    <h2 class="text-2xl font-bold mb-4 text-green-400">## Visual Documentation</h2>
+                    <p class="mb-6 text-lg">Screenshots showcasing ProcessPrison's interface evolution and functionality demonstration.</p>
+                    
+                    <div class="my-6 space-y-6">
+                        <div class="space-y-3">
+                            <img src="IMGS/version1web.png" alt="System Information Display" class="w-full max-w-2xl mx-auto border border-green-500 rounded" />
+                            <p class="text-center text-green-400 text-sm">Initial draft for system information display with real-time data collection.</p>
+                        </div>
+                        <div class="space-y-3">
+                            <img src="IMGS/v2gif.gif" alt="Interactive Features" class="w-full max-w-2xl mx-auto border border-green-500 rounded" loading="lazy" decoding="async" />
+                            <p class="text-center text-green-400 text-sm">Added dynamic user info display aswell as audio integration.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+</body>
+
+    <footer class="bg-black border-t border-green-500 text-green-400 text-center p-4 mt-8">
+        <a href="https://github.com/MNTadros/ProcessPrision" class="text-green-500 hover:text-green-400 hover:underline transition-colors font-mono">Github Link</a>
+    </footer>
+    
+</html> 
