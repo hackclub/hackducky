@@ -1,0 +1,21 @@
+/* Mobile styles placeholder */
+#desktop-normal { display: block; }
+#mobile { display: none; }
+
+@media only screen and (max-width: 768px) {
+  body {
+    margin: 5vmin;
+    padding: 10px;
+    font-size: large;
+  }
+  
+  #title {
+    font-size: 48px;
+    height: auto;
+  }
+  
+  .code-block {
+    margin: 2% 5%;
+    padding: 10px;
+  }
+}

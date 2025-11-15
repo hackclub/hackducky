@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+@import "desktop.css" only screen and (min-width: 769px);
+@import "mobile.css" only screen and (max-width: 768px);
+
+/* Colours */
+:root {
+  --black: #0C0C0C;
+  --blue: #0037DA;
+  --cyan: #3A96DD;
+  --green: #13A10E;
+  --purple: #881798;
+  --red: #C50F1F;
+  --white: #CCCCCC;
+  --yellow: #C19C00;
+
+  --brightBlack: #767676;
+  --brightBlue: #3B78FF;
+  --brightCyan: #61D6D6;
+  --brightGreen: #16C60C;
+  --brightPurple: #B4009E;
+  --brightRed: #E74856;
+  --brightWhite: #F2F2F2;
+  --brightYellow: #F9F1A5;
+}
+
+.black { color: var(--black); }
+.blue { color: var(--blue); }
+.cyan { color: var(--cyan); }
+.green { color: var(--green); }
+.purple { color: var(--purple); }
+.red { color: var(--red); }
+.white { color: var(--white); }
+.yellow { color: var(--yellow); }
+.brightBlack { color: var(--brightBlack); }
+.brightBlue { color: var(--brightBlue); }
+.brightCyan { color: var(--brightCyan); }
+.brightGreen { color: var(--brightGreen); }
+.brightPurple { color: var(--brightPurple); }
+.brightRed { color: var(--brightRed); }
+.brightWhite { color: var(--brightWhite); }
+.brightYellow { color: var(--brightYellow); }
+
+/* Global */
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: var(--brightGreen);
+  color: var(--black);
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li {
+  padding: 8px 0;
+  padding-left: 24px;
+  position: relative;
+}
+
+ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--brightGreen);
+  font-weight: bold;
+}
+
+p {
+  line-height: 1.8;
+  margin: 16px 0;
+}
+
+a {
+  color: var(--brightCyan);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--brightGreen);
+  text-shadow: 0 0 10px rgba(22, 198, 12, 0.5);
+}

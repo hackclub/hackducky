@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <title>HackDucky - Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="scripts.js" defer></script>
+</head>
+
+<body>
+    <div id="desktop-normal">
+        <div id="title-container">
+            <span id="title">HackDucky!</span>
+        </div>
+        <div class="tab">
+            <button class="tablinks" onclick="window.location.href='index.html'">home</button>
+            <button class="tablinks active" onclick="window.location.href='guide.html'">guide</button>
+            <button class="tablinks" onclick="window.location.href='projects.html'">past projects</button>
+            <button class="tablinks" onclick="window.open('https://forms.hackclub.com/hackducky')">submit</button>
+
+            <button class="tablinks" style="float: right; border:none; border-left: 1px solid var(--black);"
+                onclick="toggleOverlay()">toggle overlay</button>
+        </div>
+        <div id="guide" class="tabcontent" style="display: block;">
+            <h2 class="h2-title">HackDucky Complete Guide</h2>
+            <p style="font-size: 18px; color: var(--brightCyan); margin-bottom: 30px;">Master HackScript (enhanced ducky script) for your HackDucky board!</p>
+            
+            <div class="container">
+                <h4 class="h4-title">What is HackDucky?</h4>
+                <p>HackDucky is Hack Club's own version of a USB rubber ducky! A USB rubber ducky is a device that looks like a regular USB drive but acts as a trojan. It pretends to be a keyboard to the computer, allowing you to automate tasks and take control of the computer you plug it into.</p>
+                <h5 class="h5-title">What You Get</h5>
+                <ul>
+                    <li><strong>Dual USB ports</strong> - USB-A and USB-C for versatile connectivity</li>
+                    <li><strong>LED indicators</strong> - Status LED plus a spare LED for your custom projects!</li>
+                    <li><strong>Programmable button</strong> - Add extra features to your scripts</li>
+                    <li><strong>Debug points</strong> - Use it as a development board for other projects!</li>
+                </ul>
+            </div>
+
+            <div class="container">
+                <h4 class="h4-title">Setup Guide</h4>
+                <p>Your HackDucky ships without firmware preinstalled. Follow these steps to get started!</p>
+                
+                <h5 class="h5-title">Step 1: Flash CircuitPython</h5>
+                <ol>
+                    <li>Visit the <a href="https://circuitpython.org/board/raspberry_pi_pico2/" target="_blank">Raspberry Pi Pico 2 CircuitPython download page</a></li>
+                    <li>Download the .uf2 firmware file</li>
+                    <li>Plug in your HackDucky - a drive named RPI-RP2 should appear</li>
+                    <li>Drag and drop the .uf2 firmware into the drive</li>
+                    <li>Eject the HackDucky and plug it back in</li>
+                    <li>Success! A drive named CIRCUITPYTHON should now appear</li>
+                </ol>
+
+                <h5 class="h5-title">Step 2: Install the Firmware</h5>
+                <ol>
+                    <li>Clone the repository: <code>git clone https://github.com/hackclub/hackducky</code></li>
+                    <li>Open the folder and navigate to the firmware directory</li>
+                    <li>Copy all files from the firmware folder to the CIRCUITPYTHON drive</li>
+                    <li>Choose to <strong>replace</strong> existing files</li>
+                    <li>Delete the existing code.py file</li>
+                </ol>
+
+                <h5 class="h5-title">Step 3: Add Your Script</h5>
+                <ol>
+                    <li>Delete any existing files in the <strong>ducks</strong> folder on your HackDucky</li>
+                    <li>Copy your script into the <strong>ducks</strong> folder with the extension <strong>.ducky</strong></li>
+                </ol>
+            </div>
+
+            <div class="container">
+                <h4 class="h4-title">Time for scripting!</h4>
+                <p>Ever wanted to plug in a USB device and automate a computer? HackDucky lets you do just that using a
+                    simple scripting language inspired by Ducky Script. Read on to learn the basics and start building
+                    your own scripts!</p>
+            </div>
+            
+            <div class="container">
+                <h4 class="h4-title">Supported Commands</h4>
+                <ul>
+                    <li><strong>REM</strong> : Comments for humans, ignored by the duck</li>
+                    <li><strong>DELAY</strong> : Pauses between actions (milliseconds)</li>
+                    <li><strong>STRING</strong> : Types out text like a human</li>
+                    <li><strong>GUI, CTRL, ALT, SHIFT</strong>: Modifier keys for shortcuts</li>
+                    <li><strong>ENTER</strong> : Simulates pressing Enter</li>
+                    <li><strong>TAB, ESCAPE, SPACE, BACKSPACE, DELETE</strong>: Special keys</li>
+                    <li><strong>F1-F12, Arrow Keys, HOME/END, PAGEUP/PAGEDOWN, CAPSLOCK</strong>: Navigation and function keys</li>
+                    <li><strong>DEFAULT_DELAY</strong>: (Optional) Sets a default delay between commands</li>
+                </ul>
+            </div>
+            
+            <div class="container">
+                <h4 class="h4-title">Example: Open Notepad, type, save and close!</h4>
+                <div class="code-block">
+                    <span class="command">REM</span> Basic example script <br>
+                    <span class="command">DEFAULT_DELAY</span> 200 <br>
+                    <br>
+                    <span class="command">REM</span> Open Run dialog <br>
+                    <span class="command">GUI</span> r <br>
+                    <span class="command">DELAY</span> 500 <br>
+                    <br>
+                    <span class="command">REM</span> Launch Notepad <br>
+                    <span class="command">STRING</span> notepad <br>
+                    <span class="command">ENTER</span> <br>
+                    <span class="command">DELAY</span> 1000 <br>
+                    <br>
+                    <span class="command">REM</span> Type some text <br>
+                    <span class="command">STRING</span> Hello from HackDucky!<br>
+                    <span class="command">ENTER</span> <br>
+                    <br>
+                    <span class="command">REM</span> Save the file <br>
+                    <span class="command">CTRL</span> s <br>
+                    <span class="command">STRING</span> test.txt <br>
+                    <span class="command">ENTER</span> <br>
+                    <span class="command">ALT</span> F4 <br>
+                </div>
+                <h4 class="h4-title">What's happening here?</h4>
+                <ul>
+                    <li><strong>GUI r</strong> opens the Run dialog</li>
+                    <li><strong>STRING notepad</strong> types "notepad" and hits Enter</li>
+                    <li><strong>STRING Hello from HackDucky!</strong> types a message</li>
+                    <li><strong>CTRL s</strong> saves the file as "test.txt"</li>
+                    <li><strong>ALT F4</strong> closes Notepad</li>
+                </ul>
+            </div>
+            
+            <div class="container">
+                <h4 class="h4-title">More ideas to try!</h4>
+                <ul>
+                    <li>Open a website and type a message</li>
+                    <li>Prank script that rickrolls someone as soon as you plug in the USB</li>
+                    <li>Automate login (using only supported commands)</li>
+                    <li>Try running Doom in the terminal!</li>
+                    <li>Download and execute Python scripts (compile to .exe first!)</li>
+                </ul>
+            </div>
+            
+            <div class="container">
+                <h4 class="h4-title">Pro Tips!</h4>
+                <ul>
+                    <li>Start simple, then add more features</li>
+                    <li>Use DELAY wisely—too fast and your computer might miss keystrokes</li>
+                    <li>Test your script before using it on someone else's computer</li>
+                    <li>Have fun and share your creations in the #hackducky channel on Hack Club Slack!</li>
+                    <li>For complex projects: compile Python files to .exe, upload them publicly, then create a script to download and run them</li>
+                </ul>
+            </div>
+
+            <div class="container">
+                <h4 class="h4-title">LED Indicators</h4>
+                <ul>
+                    <li><strong>Triple blink</strong>: Startup sequence</li>
+                    <li><strong>Single blink</strong>: Working/Processing - running or starting execution</li>
+                    <li><strong>Rapid blinking</strong>: DuckyScript error or firmware issue</li>
+                </ul>
+            </div>
+
+            <div class="container">
+                <h4 class="h4-title">Troubleshooting</h4>
+                
+                <h5 class="h5-title">Read-only filesystem / Can't see the drive?</h5>
+                <p>Your Ducky is in payload mode. Press and hold the programming pin (closest to the USB-A port) while plugging it in.</p>
+                
+                <h5 class="h5-title">Script not working?</h5>
+                <ul>
+                    <li>Make sure you're not in programming mode - unplug and plug back in</li>
+                    <li>Open the debug.log file and check for ERROR lines</li>
+                    <li>If the error mentions your script, check your syntax</li>
+                    <li>If it's a different error, create an issue on GitHub</li>
+                </ul>
+                
+                <h5 class="h5-title">Keyboard not recognized?</h5>
+                <ul>
+                    <li>Try a different USB port</li>
+                    <li>Check the USB connection</li>
+                    <li>Verify your target system supports USB HID devices</li>
+                </ul>
+            </div>
+            
+            <div class="container">
+                <h4 class="h4-title">Submission Guidelines</h4>
+                
+                <h5 class="h5-title">Time Requirement</h5>
+                <ul>
+                    <li>Minimum of <strong>5 hours</strong> tracked with hackatime</li>
+                    <li>Simple DuckyScripts can be enhanced by creating Python scripts, compiling them to executables, and downloading/running them via your DuckyScript</li>
+                    <li>Challenge yourself to spend 5 hours on complex DuckyScript!</li>
+                </ul>
+
+                <h5 class="h5-title">Originality</h5>
+                <ul>
+                    <li>Your project must be an <strong>original idea</strong></li>
+                    <li>Tutorials can be referenced, but submissions should be your own creation</li>
+                </ul>
+
+                <h5 class="h5-title">Submission Limit</h5>
+                <ul>
+                    <li>You can submit <strong>multiple projects</strong></li>
+                    <li>You can only receive <strong>one HackDucky</strong></li>
+                </ul>
+                
+                <h5 class="h5-title">HackScript Requirements</h5>
+                <ul>
+                    <li>File format: .txt</li>
+                    <li>Use proper Ducky Script syntax</li>
+                    <li>Include comments with REM</li>
+                    <li>Test your script before submitting</li>
+                </ul>
+                
+                <h5 class="h5-title">CAD File Requirements</h5>
+                <ul>
+                    <li>File formats: STL or STEP preferred</li>
+                    <li>Maximum file size: 10MB</li>
+                    <li>Proper orientation for printing (no wasteful supports on overhangs)</li>
+                    <li>Should fit the HackDucky board</li>
+                </ul>
+            </div>
+
+            <div class="container">
+                <h4 class="h4-title">Safety & Ethics</h4>
+                <p style="color: var(--brightCyan); font-weight: bold;">⚠️ Please don't hack people with this - it's only for ethical use!</p>
+                <ul>
+                    <li>Only use HackDucky on systems you own or have explicit permission to test</li>
+                    <li>Never use it for malicious purposes or unauthorized access</li>
+                    <li>Be responsible and respectful with your newfound automation powers</li>
+                    <li>Use it for learning, automation, and ethical security testing only</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="overlay" style="display: none;"></div>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <title>HackDucky - Past Projects</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="scripts.js" defer></script>
+</head>
+
+<body>
+    <div id="desktop-normal">
+        <div id="title-container">
+            <span id="title">HackDucky!</span>
+        </div>
+        <div class="tab">
+            <button class="tablinks" onclick="window.location.href='index.html'">home</button>
+            <button class="tablinks" onclick="window.location.href='guide.html'">guide</button>
+            <button class="tablinks active" onclick="window.location.href='projects.html'">past projects</button>
+            <button class="tablinks" onclick="window.open('https://forms.hackclub.com/hackducky')">submit</button>
+
+            <button class="tablinks" style="float: right; border:none; border-left: 1px solid var(--black);"
+                onclick="toggleOverlay()">toggle overlay</button>
+        </div>
+        <div id="projects" class="tabcontent" style="display: block;">
+            <h2 class="h2-title">Past Projects</h2>
+            <p style="font-size: 18px; color: var(--brightCyan); margin-bottom: 30px;">Check out what others have built with HackDucky!</p>
+            
+            <div class="container" style="border: 2px solid var(--brightCyan); background: rgba(58, 150, 221, 0.1); text-align: center;">
+                <p style="font-size: 18px; color: var(--brightWhite); margin: 0;">
+                    Want your project featured here? Create a PR to the <a href="https://github.com/hackclub/hackducky" target="_blank" style="color: var(--brightCyan); font-weight: 600;">HackDucky repo</a> and message <strong style="color: var(--brightGreen);">@Aarav J</strong> on Slack!
+                </p>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%); display: flex; align-items: center; justify-content: center; font-size: 80px;">
+                        💬🔌
+                    </div>
+                    <div class="project-content">
+                        <h4 class="project-title">Discord Remote Control</h4>
+                        <p class="project-description">A HackDucky script that installs a Python executable which sends system info to a Discord webhook on startup. Allows remote computer control via Discord commands: take screenshots, view/download files, kill the program, and clear channels.</p>
+                        <a href="https://github.com/hackclub/hackducky/pull/19" target="_blank" class="project-link">View Project →</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="cat-attack.jpg" alt="Cat Attack" onerror="this.src='https://via.placeholder.com/400x300/16C60C/FFFFFF?text=Cat+Attack'">
+                    </div>
+                    <div class="project-content">
+                        <h4 class="project-title">Cat Attack</h4>
+                        <p class="project-description">Cat Attack opens a window that shows a random cat image from the CATAAS API, and the window can't be closed or minimised — it just sits there and annoys the user.</p>
+                        <a href="https://github.com/x-9917638/hackducky/tree/main/submissions/Cat%20Attack#readme" target="_blank" class="project-link">View Project →</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="project3.png" alt="Project 3" onerror="this.src='https://via.placeholder.com/400x300/16C60C/FFFFFF?text=HackDucky+Project'">
+                    </div>
+                    <div class="project-content">
+                        <h4 class="project-title">Code Mode</h4>
+                        <p class="project-description">Automatically sets up a new project to make it way faster to start coding.</p>
+                        <a href="https://github.com/hackclub/hackducky/pull/24" target="_blank" class="project-link">View Project →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="overlay" style="display: none;"></div>
+</body>
+
+</html>

@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+/* Desktop Control */
+#desktop-terminal { display: none; }
+#mobile { display: none; }
+#desktop-normal { display: block; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  color: var(--white);
+  font-family: "Fira Code", monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  min-height: 100vh;
+}
+
+#desktop-normal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+
+/* Cursor + Terminal Specific */
+.blinking-cursor {
+  display: inline-block;
+  width: 1ch;
+  color: var(--brightWhite);
+  animation: blink 1s step-start infinite;
+  transform: translateX(-18px);
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Title */
+#hackclub {
+    height: 60px;
+    vertical-align: bottom;
+    display: inline-block;
+    margin-right: 10px;
+}
+#title {
+    height: auto;
+    font-size: 72px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 10px;
+    background: linear-gradient(135deg, var(--brightGreen) 0%, var(--brightCyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(22, 198, 12, 0.3);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { filter: drop-shadow(0 0 5px rgba(22, 198, 12, 0.5)); }
+  to { filter: drop-shadow(0 0 20px rgba(22, 198, 12, 0.8)); }
+}
+#title-container {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 30px 0;
+}
+/* Overlay */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url("../overlay.png") center;
+  background-size: cover;
+  color: var(--brightWhite);
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Ensure content stays above overlay */
+#desktop-normal {
+  position: relative;
+  z-index: 100;
+}
+
+/* Buttons */
+.buttons { margin: 0; padding: 0; }
+.button {
+  display: inline-block;
+  color: var(--white);
+  padding: 12px 28px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid var(--brightGreen);
+  border-radius: 8px;
+  background: rgba(22, 198, 12, 0.1);
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+.button:hover {
+  background: rgba(22, 198, 12, 0.2);
+  box-shadow: 0 0 20px rgba(22, 198, 12, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Tabs */
+.tab {
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 12px 12px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
+  display: flex;
+  gap: 4px;
+  padding: 8px 8px 0 8px;
+}
+button {
+  font-family: "Fira Code", monospace;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+.tab button {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 12px 24px;
+  color: var(--brightBlack);
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.tab button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--brightWhite);
+  transform: translateY(-2px);
+}
+.tab button.active {
+  background: linear-gradient(135deg, rgba(59, 120, 255, 0.2) 0%, rgba(22, 198, 12, 0.2) 100%);
+  color: var(--brightWhite);
+  border-bottom: 3px solid var(--brightGreen);
+  box-shadow: 0 0 20px rgba(22, 198, 12, 0.3);
+}
+.tab button[style*="float: right"] {
+  margin-left: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 24px;
+}
+.tabcontent {
+  display: none;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  line-height: 1.8;
+}
+.tabcontentTitle {
+  color: var(--brightCyan);
+  text-decoration: underline wavy;
+  margin: 0;
+}
+
+/* Containers */
+.container {
+    margin: 20px 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s ease;
+}
+.container:hover {
+    border-color: rgba(22, 198, 12, 0.4);
+    box-shadow: 0 4px 20px rgba(22, 198, 12, 0.1);
+    transform: translateY(-2px);
+}
+.h2-title {
+    color: var(--brightCyan);
+    text-decoration: none;
+    margin: 0 0 20px 0;
+    font-size: 32px;
+    font-weight: 600;
+    position: relative;
+    display: inline-block;
+}
+.h2-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brightCyan) 0%, transparent 100%);
+}
+.h4-title {
+    color: var(--brightYellow);
+    text-decoration: none;
+    margin: 16px 0 12px 0;
+    font-size: 22px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.h4-title::before {
+    content: '▸';
+    color: var(--brightGreen);
+    font-size: 24px;
+}
+.h5-title {
+    color: var(--brightBlue);
+    text-decoration: none;
+    margin: 12px 0 8px 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+.code-block {
+    background: linear-gradient(135deg, rgba(12, 12, 12, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+    border: 1px solid rgba(22, 198, 12, 0.3);
+    border-radius: 8px;
+    color: var(--white);
+    padding: 24px;
+    margin: 20px 0;
+    font-size: 15px;
+    line-height: 1.8;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(22, 198, 12, 0.05);
+    position: relative;
+    overflow-x: auto;
+}
+.code-block::before {
+    content: '# script.txt';
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    color: var(--brightBlack);
+    font-size: 12px;
+}
+.command {
+    color: var(--brightRed);
+    font-weight: 600;
+}
+
+.half {
+    display: inline-block;
+    width: 45%;
+    vertical-align: top;
+    height: calc(100% - 120px);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(22, 198, 12, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 198, 12, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Fade in animation */
+.tabcontent {
+  animation: fadeIn 0.4s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Projects Gallery */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(22, 198, 12, 0.5);
+  box-shadow: 0 12px 40px rgba(22, 198, 12, 0.2);
+}
+
+.project-image {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+  transform: scale(1.05);
+}
+
+.project-content {
+  padding: 24px;
+}
+
+.project-title {
+  color: var(--brightCyan);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.project-description {
+  color: var(--white);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+.project-link {
+  display: inline-block;
+  color: var(--brightGreen);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.project-link:hover {
+  color: var(--brightCyan);
+  transform: translateX(5px);
+}
