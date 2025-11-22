@@ -1,0 +1,191 @@
+{% extends 'victim/base.html' %}
+
+{% block title %}Dashboard - HackDucky{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <form method="post" action="{% url 'victim:import_data' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary" onclick="return confirm('Import data from victim script?')">
+                <i class="fas fa-download"></i> Import Data
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-white-50 text-uppercase mb-1">
+                            Browser Profiles
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-white">{{ total_profiles }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-white-50 text-uppercase mb-1">
+                            Passwords
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-white">{{ total_passwords }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-key fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-white-50 text-uppercase mb-1">
+                            Cookies
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-white">{{ total_cookies }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-cookie-bite fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-white-50 text-uppercase mb-1">
+                            History Entries
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-white">{{ total_history }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-history fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Profiles -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-users"></i> Recent Browser Profiles
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_profiles %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Profile Name</th>
+                                    <th>Browser Type</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for profile in recent_profiles %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ profile.name }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ profile.browser_type }}</span>
+                                    </td>
+                                    <td>{{ profile.created_at|date:"M d, Y H:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'victim:profile_detail' profile.id %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'victim:profiles_list' %}" class="btn btn-primary">
+                            View All Profiles
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No browser profiles found</h5>
+                        <p class="text-muted">Run the victim script to extract browser data, then import it here.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt"></i> Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'victim:passwords_list' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-key"></i><br>
+                            View Passwords
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'victim:cookies_list' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-cookie-bite"></i><br>
+                            View Cookies
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'victim:history_list' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-history"></i><br>
+                            View History
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'victim:export_data' %}" class="btn btn-outline-success w-100">
+                            <i class="fas fa-download"></i><br>
+                            Export Data
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

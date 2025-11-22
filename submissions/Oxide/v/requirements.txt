@@ -1,0 +1,4 @@
+pycryptodomex==3.19.0
+pywin32==306
+pyuac==1.0.0
+requests==2.31.0 
