@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <title>HackDucky - editor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="styles/editor.main.css">
+    <script src="scripts.js" defer></script>
+    <style>
+        .editor-terminal-layout {
+            display: flex;
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        #monaco_editor {
+            flex: 2;
+        }
+
+        #output {
+            flex: 1;
+            min-height: 800px;
+        }
+
+        #run-compiler-btn {
+            margin-top: 1rem;
+            padding: 12px 24px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #79ff79;
+            background: linear-gradient(135deg, #0b0d10, #12251a);
+            border: 1px solid #1f7a1f;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            box-shadow: 0 0 12px rgba(0, 255, 128, 0.15);
+        }
+
+        #run-compiler-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 18px rgba(0, 255, 128, 0.3);
+            background: linear-gradient(135deg, #12251a, #173424);
+        }
+
+        #run-compiler-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px rgba(0, 255, 128, 0.2);
+        }
+
+        #open-doc-btn {
+            margin-top: 1rem;
+            padding: 12px 24px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #79ffea;
+            background: linear-gradient(135deg, #0b0d10, #102032);
+            border: 1px solid #1f7a7a;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            box-shadow: 0 0 12px rgba(121, 255, 255, 0.15);
+        }
+
+        #open-doc-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 18px rgba(121, 255, 255, 0.3);
+            background: linear-gradient(135deg, #102032, #153347);
+        }
+
+        #open-doc-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px rgba(121, 255, 255, 0.2);
+        }
+    </style>
+
+    <!-- Brython for backend -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.13.2/brython.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.13.2/brython_stdlib.js">
+    </script>
+</head>
+
+<body>
+    <div id="desktop-normal">
+        <div class="tab">
+            <button class="tablinks" onclick="window.location.href='index.html'">home</button>
+            <button class="tablinks" onclick="window.location.href='guide.html'">guide</button>
+            <button class="tablinks" onclick="window.location.href='projects.html'">past projects</button>
+            <button class="tablinks active" onclick="window.location.href='editor.html'">editor</button>
+            <button class="tablinks" onclick="window.open('https://forms.hackclub.com/hackducky')">submit</button>
+
+            <button class="tablinks" style="float: right; border:none; border-left: 1px solid var(--black);"
+                onclick="toggleOverlay()">toggle overlay</button>
+            <button id="run-compiler-btn" type="button">Run compiler</button>
+            <button id="open-doc-btn" onclick="window.open('https://github.com/hackclub/hackducky/blob/main/reference.md')">Open docs</button>
+        </div>
+    </div>
+    <div class="editor-terminal-layout">
+            <div id="monaco_editor" style="height:815px"></div>
+            <!-- MONACO JS -->
+            <script>var require = { paths: { 'vs': 'monaco-scripts/vs' } };</script>
+            
+            <script src="monaco-scripts/vs/loader.js"></script>
+            <script src="monaco-scripts/vs/editor/editor.main.nls.js"></script>
+            <script src="monaco-scripts/vs/editor/editor.main.js"></script>
+
+            <!-- Setting up standalone monaco was stolen from some stack overflow answer :3 -->
+
+            <!-- Editor -->
+            <script type="module" src="editor-scripts/main.js"></script>
+            <!-- Output -->
+            <textarea
+                disabled
+                id="output"
+                style="
+                    width: 100%;
+                    height: 800px;
+                    margin-top: 1rem;
+                    margin-left: 0px;
+                    padding: 1rem;
+                    background-color: #0b0d10;
+                    color: #79ff79;
+                    font-family: 'Fira Code', 'SFMono-Regular', Menlo, monospace;
+                    border: 1px solid #1f7a1f;
+                    border-radius: 6px;
+                    box-shadow: inset 0 0 12px rgba(0, 255, 128, 0.15);
+                "></textarea>
+        </div>
+</body>
+
+</html>
