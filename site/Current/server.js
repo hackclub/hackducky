@@ -112,17 +112,14 @@ app.post('/api/upload', async (req, res) => {
         const buffer = Buffer.from(file.split(',')[1] || file, 'base64');
         fs.writeFileSync(uploadPath, buffer);
 
-        // Determine the public URL
+        // Determine the public URL for CDN upload
         let publicUrl;
         if (process.env.VERCEL_URL) {
-            // Production on Vercel
             publicUrl = `https://${process.env.VERCEL_URL}/uploads/${uniqueName}`;
         } else if (process.env.NGROK_URL) {
-            // Using ngrok for local testing
             publicUrl = `${process.env.NGROK_URL}/uploads/${uniqueName}`;
         } else {
-            // Local development fallback
-            publicUrl = `http://localhost:${PORT}/uploads/${uniqueName}`;
+            return res.status(400).json({ error: 'Set NGROK_URL for local development or deploy to Vercel' });
         }
 
         console.log('Uploading to CDN with URL:', publicUrl);
