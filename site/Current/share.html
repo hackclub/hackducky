@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <title>HackDucky - Share</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="scripts.js" defer></script>
+    <style>
+        /* Custom styles for share page forms and elements */
+        .h2-title {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--brightCyan), var(--brightGreen));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--brightWhite);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--brightCyan);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--brightWhite);
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--brightGreen);
+            box-shadow: 0 0 0 2px rgba(22, 198, 12, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0b0d10;
+            background: var(--brightGreen);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(22, 198, 12, 0.4);
+            background: #1be610;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--brightCyan);
+            color: var(--brightCyan);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(58, 150, 221, 0.1);
+            box-shadow: 0 4px 20px rgba(58, 150, 221, 0.2);
+            color: var(--brightWhite);
+        }
+
+        #share-result {
+            margin-top: 30px;
+            padding: 30px;
+            border: 1px solid var(--brightGreen);
+            background: rgba(22, 198, 12, 0.05);
+            border-radius: 12px;
+            display: none;
+            text-align: center;
+        }
+
+        #share-link {
+            text-align: center; 
+            font-size: 1.1rem; 
+            padding: 15px; 
+            margin: 20px 0;
+            border: 1px solid var(--brightGreen);
+            border-radius: 8px;
+            color: var(--brightWhite);
+            background: rgba(0,0,0,0.5);
+            width: 100%;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Script View Styles */
+        .script-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
+
+        .script-meta h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            color: var(--brightWhite);
+        }
+
+        .script-author {
+            color: var(--brightCyan);
+            font-size: 1.1rem;
+        }
+
+        .script-display-container {
+            background: #0e1116;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .script-window-bar {
+            background: #161b22;
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .script-display {
+            background: #0d1117; /* GitHub dark theme background */
+            padding: 24px;
+            white-space: pre;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            color: #e6edf3;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .script-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="desktop-normal">
+        <div id="title-container">
+            <span id="title">HackDucky!</span>
+        </div>
+        <div class="tab">
+            <button class="tablinks" onclick="window.location.href='index.html'">home</button>
+            <button class="tablinks" onclick="window.location.href='guide.html'">guide</button>
+            <button class="tablinks" onclick="window.location.href='projects.html'">past projects</button>
+            <button class="tablinks" onclick="window.location.href='editor.html'">editor</button>
+            <button class="tablinks active" onclick="window.location.href='share.html'">share</button>
+            <button class="tablinks" onclick="window.open('https://forms.hackclub.com/hackducky')">submit</button>
+
+            <button class="tablinks" style="float: right; border:none; border-left: 1px solid var(--black);"
+                onclick="toggleOverlay()">toggle overlay</button>
+        </div>
+
+        <div id="home" class="tabcontent" style="display: block;">
+            
+            <!-- VIEW MODE -->
+            <div id="view-script-container" style="display: none;">
+                <div class="script-header">
+                    <div class="script-meta">
+                        <h1 id="view-title">Script Name</h1>
+                        <div class="script-author">by <span id="view-author">Author</span></div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="copyToClipboard()">📋 Copy Code</button>
+                        <button class="btn" onclick="window.location.href='share.html'">➕ Share New</button>
+                    </div>
+                </div>
+
+                <div id="view-image-container" style="margin-bottom: 30px; display: none;">
+                    <img id="view-image" src="" alt="Script Image" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+                </div>
+
+                <p id="view-description" style="color: var(--brightWhite); font-size: 1.1rem; line-height: 1.7; margin-bottom: 30px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 4px solid var(--brightCyan);"></p>
+                
+                <h4 class="form-group label" style="color: var(--brightGreen); margin-bottom: 15px;">SOURCE CODE</h4>
+                <div class="script-display-container">
+                    <div class="script-window-bar">
+                        <div class="window-dot dot-red"></div>
+                        <div class="window-dot dot-yellow"></div>
+                        <div class="window-dot dot-green"></div>
+                    </div>
+                    <div id="view-code" class="script-display"></div>
+                </div>
+            </div>
+
+            <!-- CREATE MODE -->
+            <div id="create-script-container">
+                <h2 class="h2-title">Share your Ducky</h2>
+                <p class="subtitle">Paste your script below to generate a shareable demo link.</p>
+                
+                <form id="share-form" onsubmit="submitScript(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="script-name">Script Name</label>
+                            <input type="text" id="script-name" required placeholder="e.g. Ultimate Rickroll">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="author-name">Author</label>
+                            <input type="text" id="author-name" required placeholder="Your Name or Handle">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" required placeholder="Explain what this script does..." style="min-height: 120px;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image-url">Image URL (Optional)</label>
+                        <input type="url" id="image-url" placeholder="https://example.com/screenshot.png">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="script-content">The Script</label>
+                        <textarea id="script-content" required placeholder="REM Ducky Script Here...&#10;DELAY 1000&#10;STRING Hello World!" style="font-family: 'Fira Code', monospace; min-height: 300px;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn" id="submit-btn" style="width: 100%; justify-content: center;">🚀 Generate Share Link</button>
+                </form>
+
+                <div id="share-result">
+                    <h4 style="font-size: 1.5rem; color: var(--brightGreen); margin-bottom: 10px;">✨ Script Published!</h4>
+                    <p style="color: var(--brightWhite);">Here is your secret link:</p>
+                    <input type="text" id="share-link" readonly onclick="this.select()">
+                    <button class="btn" onclick="copyLink()">📋 Copy Link</button>
+                    <div style="margin-top: 20px;">
+                         <button class="btn btn-secondary" onclick="window.location.reload()">Create Another</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="overlay" style="display: none;"></div>
+
+    <script>
+        // Check for ID in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const scriptId = urlParams.get('id');
+
+        if (scriptId) {
+            loadScript(scriptId);
+        }
+
+        async function submitScript(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating...";
+            btn.disabled = true;
+
+            const data = {
+                fields: {
+                    "Name": document.getElementById('script-name').value,
+                    "Author": document.getElementById('author-name').value,
+                    "Description": document.getElementById('description').value,
+                    "Script": document.getElementById('script-content').value,
+                    "Image": document.getElementById('image-url').value
+                }
+            };
+
+            try {
+                // Call our Vercel Serverless Function instead of Airtable directly
+                const response = await fetch('/api/script', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to save');
+                }
+
+                const result = await response.json();
+                const shareUrl = `${window.location.origin}${window.location.pathname}?id=${result.id}`;
+                
+                document.getElementById('share-link').value = shareUrl;
+                document.getElementById('share-result').style.display = 'block';
+                document.getElementById('share-form').style.display = 'none';
+                document.querySelector('#create-script-container h2').innerText = "Success!";
+                document.querySelector('#create-script-container p').style.display = 'none';
+
+            } catch (error) {
+                console.error(error);
+                alert('Error submitting script: ' + error.message);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function loadScript(id) {
+            document.getElementById('create-script-container').classList.add('hidden');
+            document.getElementById('view-script-container').style.display = 'block';
+
+            try {
+                // Call our Vercel Serverless Function
+                const response = await fetch(`/api/script?id=${id}`);
+
+                if (!response.ok) throw new Error('Script not found');
+
+                const record = await response.json();
+                const fields = record.fields;
+
+                document.getElementById('view-title').innerText = fields.Name;
+                document.getElementById('view-author').innerText = fields.Author;
+                document.getElementById('view-description').innerText = fields.Description;
+                document.getElementById('view-code').innerText = fields.Script;
+
+                if (fields.Image) {
+                    const imgContainer = document.getElementById('view-image-container');
+                    const img = document.getElementById('view-image');
+                    img.src = fields.Image;
+                    imgContainer.style.display = 'block';
+                }
+
+                // Update page title
+                document.title = `${fields.Name} by ${fields.Author} - HackDucky Share`;
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('view-script-container').innerHTML = `
+                    <h2 class="h2-title" style="color: var(--brightRed)">Error</h2>
+                    <p class="brightWhite">Could not load script. It may have been deleted or the ID is invalid.</p>
+                    <button class="btn" onclick="window.location.href='share.html'">Go Back</button>
+                `;
+            }
+        }
+
+        function copyLink() {
+            const copyText = document.getElementById("share-link");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(copyText.value);
+            alert("Link copied to clipboard!");
+        }
+
+        function copyToClipboard() {
+            const code = document.getElementById('view-code').innerText;
+            navigator.clipboard.writeText(code);
+            alert("Script copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
