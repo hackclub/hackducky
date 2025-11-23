@@ -97,16 +97,45 @@ app.post('/api/upload', async (req, res) => {
             return res.status(400).json({ error: 'No file provided' });
         }
 
-        // Upload to Hackclub CDN directly with the base64 data URL
+        // Save file temporarily
+        const fileExt = filename ? filename.split('.').pop() : 'jpg';
+        const uniqueName = `${crypto.randomBytes(8).toString('hex')}.${fileExt}`;
+        const uploadsDir = path.join(__dirname, 'uploads');
+        const uploadPath = path.join(uploadsDir, uniqueName);
+
+        // Ensure uploads directory exists
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+
+        // Convert base64 to buffer and write
+        const buffer = Buffer.from(file.split(',')[1] || file, 'base64');
+        fs.writeFileSync(uploadPath, buffer);
+
+        // Determine the public URL
+        let publicUrl;
+        if (process.env.VERCEL_URL) {
+            // Production on Vercel
+            publicUrl = `https://${process.env.VERCEL_URL}/uploads/${uniqueName}`;
+        } else if (process.env.NGROK_URL) {
+            // Using ngrok for local testing
+            publicUrl = `${process.env.NGROK_URL}/uploads/${uniqueName}`;
+        } else {
+            // Local development fallback
+            publicUrl = `http://localhost:${PORT}/uploads/${uniqueName}`;
+        }
+
+        console.log('Uploading to CDN with URL:', publicUrl);
+
+        // Upload to Hackclub CDN
         try {
-            console.log('Uploading to CDN with data URL...');
             const cdnResponse = await fetch('https://cdn.hackclub.com/api/v3/new', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer beans',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify([file])
+                body: JSON.stringify([publicUrl])
             });
 
             if (!cdnResponse.ok) {
@@ -118,6 +147,9 @@ app.post('/api/upload', async (req, res) => {
             const cdnResult = await cdnResponse.json();
             const cdnUrl = cdnResult.files[0].deployedUrl;
 
+            // Delete temp file after successful CDN upload
+            fs.unlinkSync(uploadPath);
+
             res.status(200).json({
                 success: true,
                 url: cdnUrl,
@@ -125,7 +157,13 @@ app.post('/api/upload', async (req, res) => {
             });
         } catch (cdnError) {
             console.error('CDN error:', cdnError);
-            res.status(500).json({ error: 'CDN upload failed: ' + cdnError.message });
+            // Fallback: return local URL if CDN fails
+            res.status(200).json({
+                success: true,
+                url: `/uploads/${uniqueName}`,
+                filename: uniqueName,
+                note: 'Using local storage - CDN upload failed'
+            });
         }
     } catch (error) {
         console.error('Upload error:', error);
