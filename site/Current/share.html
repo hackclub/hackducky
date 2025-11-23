@@ -73,6 +73,60 @@
             line-height: 1.6;
         }
 
+        .drop-zone {
+            border: 2px dashed rgba(58, 150, 221, 0.5);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: rgba(58, 150, 221, 0.05);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--brightGreen);
+            background: rgba(22, 198, 12, 0.1);
+        }
+
+        .drop-zone p {
+            color: var(--brightCyan);
+            margin: 0;
+        }
+
+        .drop-zone-icon {
+            font-size: 2rem;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 300px;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .upload-progress {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            color: var(--brightCyan);
+            text-align: center;
+        }
+
         .btn {
             padding: 14px 28px;
             font-size: 1rem;
@@ -282,9 +336,19 @@
                         <textarea id="description" required placeholder="Explain what this script does..." style="min-height: 120px;"></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="image-url">Image URL (Optional)</label>
-                        <input type="url" id="image-url" placeholder="https://example.com/screenshot.png">
+                    <div class="form-group full-width">
+                        <label>Image Upload (Optional)</label>
+                        <div class="drop-zone" id="drop-zone">
+                            <div class="drop-zone-icon">📸</div>
+                            <p>Drag and drop an image here</p>
+                            <p style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">or click to select</p>
+                        </div>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        <div id="upload-progress" class="upload-progress"></div>
+                        <div id="image-preview" class="image-preview" style="display: none;">
+                            <img id="preview-img" src="" alt="Preview">
+                        </div>
+                        <input type="hidden" id="image-url">
                     </div>
 
                     <div class="form-group">
@@ -316,6 +380,87 @@
 
         if (scriptId) {
             loadScript(scriptId);
+        }
+
+        // Initialize drag and drop
+        const dropZone = document.getElementById('drop-zone');
+        const imageUpload = document.getElementById('image-upload');
+
+        dropZone.addEventListener('click', () => imageUpload.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImageUpload(files[0]);
+            }
+        });
+
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+
+        async function handleImageUpload(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file');
+                return;
+            }
+
+            const progressDiv = document.getElementById('upload-progress');
+            progressDiv.style.display = 'block';
+            progressDiv.textContent = 'Uploading image...';
+
+            try {
+                // Convert file to base64 data URL
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const base64Data = e.target.result;
+                    
+                    // Upload to our server (which handles CDN upload)
+                    const uploadResponse = await fetch('/api/upload', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            file: base64Data,
+                            filename: file.name
+                        })
+                    });
+
+                    if (!uploadResponse.ok) {
+                        throw new Error('Server upload failed');
+                    }
+
+                    const uploadResult = await uploadResponse.json();
+                    const imageUrl = uploadResult.url;
+
+                    // Set the hidden input with the image URL
+                    document.getElementById('image-url').value = imageUrl;
+
+                    // Show preview
+                    document.getElementById('preview-img').src = imageUrl;
+                    document.getElementById('image-preview').style.display = 'block';
+
+                    // Hide progress
+                    progressDiv.style.display = 'none';
+                    dropZone.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } catch (error) {
+                console.error(error);
+                progressDiv.textContent = 'Upload failed. Try again.';
+                progressDiv.style.color = '#ff6b6b';
+            }
         }
 
         async function submitScript(e) {

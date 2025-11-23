@@ -1,12 +1,14 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 // Serve static files (html, css, js, images)
 app.use(express.static(path.join(__dirname)));
@@ -84,6 +86,51 @@ app.all('/api/script', async (req, res) => {
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
+});
+
+// API Route: Handle Image Upload
+app.post('/api/upload', async (req, res) => {
+    try {
+        const { file, filename } = req.body;
+
+        if (!file) {
+            return res.status(400).json({ error: 'No file provided' });
+        }
+
+        // Upload to Hackclub CDN directly with the base64 data URL
+        try {
+            console.log('Uploading to CDN with data URL...');
+            const cdnResponse = await fetch('https://cdn.hackclub.com/api/v3/new', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer beans',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify([file])
+            });
+
+            if (!cdnResponse.ok) {
+                const errorText = await cdnResponse.text();
+                console.error('CDN response status:', cdnResponse.status, 'Body:', errorText);
+                throw new Error(`CDN upload failed: ${cdnResponse.status}`);
+            }
+
+            const cdnResult = await cdnResponse.json();
+            const cdnUrl = cdnResult.files[0].deployedUrl;
+
+            res.status(200).json({
+                success: true,
+                url: cdnUrl,
+                filename: cdnResult.files[0].file
+            });
+        } catch (cdnError) {
+            console.error('CDN error:', cdnError);
+            res.status(500).json({ error: 'CDN upload failed: ' + cdnError.message });
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        res.status(500).json({ error: 'Upload failed: ' + error.message });
+    }
 });
 
 // Fallback for any other request (optional, handled by static middleware usually)
