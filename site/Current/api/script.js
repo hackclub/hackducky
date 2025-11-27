@@ -43,6 +43,11 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Missing script ID' });
         }
 
+        // Validate ID format - Airtable record IDs are alphanumeric
+        if (!/^[a-zA-Z0-9]+$/.test(id)) {
+            return res.status(400).json({ error: 'Invalid script ID format' });
+        }
+
         try {
             const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${TABLE_NAME}/${id}`, {
                 headers: {
