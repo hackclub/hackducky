@@ -4,14 +4,14 @@ The hackclub themed USB rubber ducky ! - Check out [hackducky](https://hackclub.
 
 # What is this?
 
-Hackducky is hackclubs own version of making a USB rubber ducky built by hackclubers.A usb rubber ducky is basically something that looks like a USB but is actually a trojan. It pretends to be a keyboard to the computer allowing you to basically take control of the computer you plug it into
+Hackducky is hackclubs own version of making a USB rubber ducky built by hackclubers. A usb rubber ducky is basically something that looks like a USB but is actually a trojan. It pretends to be a keyboard to the computer allowing you to basically take control of the computer you plug it into
 
 ## What you get
 
 - Hackducky Board
     -  Dual USB ports (USB-A and USB-C)
-    -  LED for the status and spare LED!- you can use it for other things if you like !
-    -  Button for any extra features you may want to add !
+    -  LED for the status and spare LED!- you can use it for other things if you like!
+    -  Button for any extra features you may want to add!
     -  Debug points to use it as a devboard!
 
 
