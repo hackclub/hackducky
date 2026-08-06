@@ -1,0 +1,153 @@
+{% extends 'victim/base.html' %}
+
+{% block title %}Browser Profiles - HackDucky{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-users"></i> Browser Profiles</h1>
+</div>
+
+<!-- Search -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-8">
+                <label for="search" class="form-label">Search Profiles</label>
+                <input type="text" class="form-control" id="search" name="search" value="{{ search }}" placeholder="Search by profile name or browser type...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">&nbsp;</label>
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    {% if search %}
+                        <a href="{% url 'victim:profiles_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Clear
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Profiles Grid -->
+<div class="row">
+    {% if page_obj %}
+        {% for profile in page_obj %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        {% if profile.profile_pic %}
+                            <img src="{{ profile.profile_pic.url }}" alt="Profile" class="rounded-circle me-3" width="50" height="50">
+                        {% else %}
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="card-title mb-0">{{ profile.name }}</h5>
+                            <span class="badge bg-primary">{{ profile.browser_type }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row text-center mb-3">
+                        <div class="col-4">
+                            <div class="border-end">
+                                <h6 class="mb-0">{{ profile.passwords.count }}</h6>
+                                <small class="text-muted">Passwords</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="border-end">
+                                <h6 class="mb-0">{{ profile.cookies.count }}</h6>
+                                <small class="text-muted">Cookies</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h6 class="mb-0">{{ profile.history.count }}</h6>
+                            <small class="text-muted">History</small>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'victim:profile_detail' profile.id %}" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> View Details
+                        </a>
+                        <a href="{% url 'victim:export_profile_data' profile.id %}" class="btn btn-outline-success">
+                            <i class="fas fa-download"></i> Export
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <small>Created: {{ profile.created_at|date:"M d, Y H:i" }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No browser profiles found</h5>
+                    <p class="text-muted">
+                        {% if search %}
+                            Try adjusting your search criteria.
+                        {% else %}
+                            No browser profiles have been extracted yet. Run the victim script and import the data.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% if search %}&search={{ search }}{% endif %}">
+                    <i class="fas fa-angle-double-left"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">
+                    <i class="fas fa-angle-double-right"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
