@@ -1,0 +1,19 @@
+DEFAULT_DELAY 200
+REM Rubber Ducky Script
+GUI r
+STRING powershell
+CTRL SHIFT ENTER
+DELAY 1000
+ALT y
+DELAY 5000
+REM powershell boot up faster won't you
+STRING Set-ExecutionPolicy Bypass -Scope Process -Force
+ENTER
+STRING mkdir setup
+ENTER
+STRING cd setup
+ENTER
+STRING iwr "https://raw.githubusercontent.com/Sreekar617/setup-ducky/refs/heads/main/OOSU10.cfg" -OutFile "OOSU10.cfg"
+ENTER
+STRING irm https://raw.githubusercontent.com/Sreekar617/setup-ducky/refs/heads/main/main.ps1 | iex
+ENTER
