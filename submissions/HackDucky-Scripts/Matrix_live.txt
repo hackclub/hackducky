@@ -1,0 +1,25 @@
+REM Open Run dialog
+DELAY 1000
+WINDOWS r
+DELAY 500
+
+REM Open YouTube video (replace URL with any matrix/cmd-style vid you want)
+STRING https://www.youtube.com/results?search_query=hacking+matrix+cmd
+ENTER
+
+REM Give browser time to load
+DELAY 6000
+
+REM Open first search result
+TAB
+TAB
+TAB
+ENTER
+DELAY 6000
+
+REM Put YouTube player into fullscreen (f)
+f
+DELAY 500
+
+REM Put browser itself into fullscreen (F11)
+F11

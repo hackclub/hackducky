@@ -73,6 +73,14 @@
 - **GitHub CI Integration**: Basic GitHub Actions setup  
 - **Bonus**: Sample MEVN + LAMP project scaffolding
 
+### 5. `Natrix_live.txt' - Trick your friends to think they are getting Hacked!
+
+🌐 Opens youtube, searches for a matrix vid and plays it, then opens fullscreen.
+
+- **Pranks**: Can trick your friends into thinking they got hacked.
+- **Repurposable**: Can be repurposed to open any URL/Video.
+- **Fun to play around with**: Can be used in schools and make teachers panic, used on public PCs, and more!
+
 ---
 
 ## 🧑‍💻 Usage
