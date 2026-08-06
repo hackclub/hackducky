@@ -1,0 +1,128 @@
+﻿REM_BLOCK
+Welcome to the HackScript editor!
+This script demonstrates HID trust with dramatic timing.
+END_REM
+
+REM The Nice Ducky
+GUI r
+DELAY 250
+STRINGLN notepad
+ENTER
+DELAY 500
+
+STRINGLN HELLO.
+DELAY 250
+STRINGLN YES, YOU.
+DELAY 250
+STRINGLN THE HUMAN WITH THE USB PORT.
+DELAY 500
+
+STRINGLN ----------------------------------------
+DELAY 200
+STRINGLN Relax.
+DELAY 200
+STRINGLN If this were malware, you would already be in trouble.
+DELAY 200
+STRINGLN This is a demonstration.
+DELAY 500
+STRINGLN I could open more than Notepad.
+STRINGLN I could do this silently.
+STRINGLN I could be finished already.
+
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+STRING RANDOM_CHAR
+ctrl a
+backspace
+STRINGLN I bet you couldnt read that, I could.
+STRINGLN -----------------------------------------
+DELAY 200
+STRINGLN I did not install software.
+DELAY 150
+STRINGLN I did not ask permission.
+DELAY 150
+STRINGLN I pretended to be a keyboard.
+DELAY 500
+
+STRINGLN ------------------------------------------
+DELAY 200
+STRINGLN Your computer trusted me.
+DELAY 500
+
+STRINGLN ------------------------------------------
+DELAY 200
+STRINGLN Fun facts:
+DELAY 150
+STRINGLN    - Keyboards are trusted automatically
+DELAY 150
+STRINGLN    - USB does not mean safe
+DELAY 150
+STRINGLN    - "I'll just charge it" are famous last words
+DELAY 500
+
+STRINGLN -------------------------------------------
+DELAY 200
+STRINGLN I am typing this faster than any human.
+DELAY 300
+STRINGLN That should worry you.
+DELAY 500
+
+STRINGLN --------------------------------------------
+DELAY 200
+STRINGLN If I were evil:
+DELAY 150
+STRINGLN    - I would not announce myself
+DELAY 150
+STRINGLN    - I would not be this funny
+DELAY 150
+STRINGLN    - You would not be reading this
+DELAY 500
+STRINGLN I am not software.
+STRINGLN I am not running.
+STRINGLN I am already trusted.
+STRINGLN --------------------------------------------
+DELAY 200
+STRINGLN This worked because:
+DELAY 150
+STRINGLN    - HID devices are trusted
+DELAY 150
+STRINGLN    - No confirmation is required
+DELAY 150
+STRINGLN    - Convenience beats caution
+DELAY 500
+
+STRINGLN --------------------------------------------
+DELAY 300
+STRINGLN Unplug me.
+DELAY 300
+STRINGLN Stay curious.
+DELAY 300
+STRINGLN Do not trust ducks.
+
