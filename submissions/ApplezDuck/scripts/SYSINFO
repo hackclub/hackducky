@@ -1,0 +1,25 @@
+REM this is a script to fetch some system data to files
+REM ------------------------------------------------------
+
+FUNCTION IPCONFIG
+    GUI r
+    DELAY 750
+    STRING cmd
+    ENTER
+    DELAY 1500
+    STRING ipconfig > .IPCONFIG
+END_FUNCTION
+
+FUNCTION ROUTE 
+    GUI r
+    DELAY 750
+    STRING cmd
+    ENTER
+    DELAY 1500
+    STRING rdinfo > .RDINFO
+END_FUNCTION
+
+CALL IPCONFIG
+
+CALL ROUTE
+
