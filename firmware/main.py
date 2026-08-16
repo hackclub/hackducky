@@ -1,12 +1,17 @@
-# NOT IMPLEMENTED: BUTTON, ATTACKMODE, LED, $_RANDOM_MIN, $_RANDOM_MAX
-
+# NOT IMPLEMENTED: BUTTON, ATTACKMODE, $_RANDOM_MIN, $_RANDOM_MAX
+import os
 import digitalio
 import board
+import microcontroller
 
 print("Main.py: Starting up...")
 # Setup LED
 status_led = digitalio.DigitalInOut(board.LED)
 status_led.direction = digitalio.Direction.OUTPUT
+
+# get envs
+payload_name = os.getenv("PAYLOAD_NAME")
+payload_dir = os.getenv("PAYLOAD_DIRECTORY")
 
 
 def flash_error():
@@ -22,7 +27,7 @@ from adafruit_logging import FileHandler
 
 logger = logging.getLogger("compiler.py")
 logger.setLevel(logging.DEBUG)
-programming_mode = True
+programming_mode = microcontroller.nvm[0] == 1
 
 try:
     LOG_FILE_PATH = "/debug.log"
@@ -31,7 +36,6 @@ try:
     import adafruit_datetime as datetime
 
     logger.info(f"BOOT {datetime.datetime.now()}")
-    programming_mode = False
 except:
     print("Debug mode active...")
     print("Logging to file is disabled.")
@@ -269,9 +273,8 @@ try:
                     compiled_loop_body = self._compile_block(loop_body_lines)
 
                     # Create a single function that runs the entire loop
-                    loop_func = (
-                        lambda ct=condition_tokens,
-                        body=compiled_loop_body: self._execute_while_loop(ct, body)
+                    loop_func = lambda ct=condition_tokens, body=compiled_loop_body: (
+                        self._execute_while_loop(ct, body)
                     )
                     out.append(loop_func)
                     continue
@@ -401,6 +404,11 @@ try:
 
                 elif command.startswith("$"):
                     out.append(lambda l=line: self.reassign(l))
+
+                elif command == "LED_ON":
+                    out.append(lambda: self.set_led(True))
+                elif command == "LED_OFF":
+                    out.append(lambda: self.set_led(False))
 
             return out
 
@@ -680,6 +688,9 @@ try:
             logger.debug(f"Sleeping for {t}ms")
             time.sleep(t / 1000)
 
+        def set_led(self, b: bool):
+            status_led.value = b
+
         def set_default_delay(self, t: int):
             self.default_delay = t
 
@@ -722,26 +733,47 @@ try:
         flash_error()
     else:
         from layouts_manager import layouts, kbd, keycodes
+
         print(f"Main.py: Found {len(usb_hid.devices)} HID devices")
         print("Main.py: Keyboard initialized successfully")
-        
+
         # Test keyboard initialization
         kbd.release_all()
         print("Main.py: Keyboard test successful")
 
+    # Prepare payload
+
+    if not payload_dir:
+        payload_dir = "/ducks"
+
+    if not payload_name:
+        print("Main.py: Looking for .ducky files...")
+        files = os.listdir(payload_dir)
+        print(f"Main.py: Files in {payload_dir}: {files}")
+
+        ducky_files = sorted(
+            [
+                f"{payload_dir}/" + f
+                for f in files
+                if (f.endswith(".ducky") or f.endswith(".ducky.txt"))
+                and not f.startswith("._")
+            ]
+        )
+        print(f"Main.py: Found {len(ducky_files)} .ducky file(s): {ducky_files}")
+
+        if ducky_files:
+            payload_path = ducky_files[0]
+        else:
+            payload_path = None
+    else:
+        payload_path = f"{payload_dir}/{payload_name}"
+
     # Main execution
-    print("Main.py: Looking for .ducky files...")
-    files = os.listdir("/ducks")
-    print(f"Main.py: Files in /ducks: {files}")
-    
-    ducky_files = sorted(["/ducks/" + f for f in files if (f.endswith(".ducky") or f.endswith(".ducky.txt")) and not f.startswith("._")])
-    print(f"Main.py: Found {len(ducky_files)} .ducky file(s): {ducky_files}")
-    
-    if ducky_files:
+    if payload_path:
         print(f"Main.py: Creating compiler...")
         compiler = DuckyScriptCompiler(layouts["us"], kbd, keycodes["us"])
         print(f"Main.py: Starting payload execution...")
-        compiler.run(ducky_files[0])
+        compiler.run(payload_path)
     else:
         print("Main.py: ERROR - No .ducky files found in /ducks directory!")
 
@@ -749,6 +781,7 @@ except Exception as e:
     print(f"Main.py: FATAL ERROR: {e}")
     try:
         import traceback
+
         traceback.print_exception(type(e), e, e.__traceback__)
     except:
         pass  # traceback might not be available in CircuitPython

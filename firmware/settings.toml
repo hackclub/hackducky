@@ -1,0 +1,3 @@
+PAYLOAD_DIRECTORY=/ducks
+PAYLOAD_NAME=test-firmware.ducky
+ATTACK_MODE=storage
