@@ -12,6 +12,7 @@ from layouts.keyboard_layout_win_it import KeyboardLayout as LayoutIT
 from layouts.keyboard_layout_win_po import KeyboardLayout as LayoutPO
 from layouts.keyboard_layout_win_sw import KeyboardLayout as LayoutSW
 from layouts.keyboard_layout_win_tr import KeyboardLayout as LayoutTR
+from layouts.keyboard_layout_win_uk import KeyboardLayout as LayoutUK
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS as LayoutUS
 
 from layouts.keycode_win_br import Keycode as KeycodeBR
@@ -25,6 +26,7 @@ from layouts.keycode_win_it import Keycode as KeycodeIT
 from layouts.keycode_win_po import Keycode as KeycodePO
 from layouts.keycode_win_sw import Keycode as KeycodeSW
 from layouts.keycode_win_tr import Keycode as KeycodeTR
+from layouts.keycode_win_uk import Keycode as KeycodeUK
 from adafruit_hid.keycode import Keycode as KeycodeUS
 
 kbd = Keyboard(usb_hid.devices)
@@ -40,7 +42,8 @@ layouts = {
     "sw": LayoutSW(kbd),
     "tr": LayoutTR(kbd),
     "us": LayoutUS(kbd),
-    "br": LayoutBR(kbd)
+    "br": LayoutBR(kbd),
+    "uk": LayoutUK(kbd),
 }
 keycodes = {
     "fr": KeycodeFR,
@@ -54,5 +57,6 @@ keycodes = {
     "sw": KeycodeSW,
     "tr": KeycodeTR,
     "us": KeycodeUS,
-    "br": KeycodeBR
+    "br": KeycodeBR,
+    "uk": KeycodeUK,
 }

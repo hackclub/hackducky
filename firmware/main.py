@@ -1,5 +1,6 @@
 # NOT IMPLEMENTED: BUTTON, ATTACKMODE, LED, $_RANDOM_MIN, $_RANDOM_MAX
 
+import os
 import digitalio
 import board
 
@@ -7,6 +8,9 @@ print("Main.py: Starting up...")
 # Setup LED
 status_led = digitalio.DigitalInOut(board.LED)
 status_led.direction = digitalio.Direction.OUTPUT
+
+# get keyboard layout env var
+kb_layout = os.getenv("KB_LAYOUT", "us")
 
 
 def flash_error():
@@ -739,7 +743,7 @@ try:
     
     if ducky_files:
         print(f"Main.py: Creating compiler...")
-        compiler = DuckyScriptCompiler(layouts["us"], kbd, keycodes["us"])
+        compiler = DuckyScriptCompiler(layouts[kb_layout], kbd, keycodes[kb_layout])
         print(f"Main.py: Starting payload execution...")
         compiler.run(ducky_files[0])
     else:

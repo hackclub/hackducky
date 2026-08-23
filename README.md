@@ -87,6 +87,23 @@ Press and hold the programming pin (the pin closest to the USB-A port) while plu
 - Check USB connection
 - Verify target system supports USB HID
 
+## Different Keyboard Layout:
+- Configure for your target's keyboard layout in the `settings.toml` file
+- Available layouts:
+    - `fr` - French
+    - `de` - German
+    - `cz` - Czech
+    - `da` - Danish
+    - `es` - Spanish
+    - `hu` - Hungarian
+    - `it` - Italian
+    - `po` - Portuguese
+    - `sw` - Swedish
+    - `tr` - Turkish
+    - `us` - US English
+    - `br` - Brazilian Portuguese
+    - `uk` - UK English
+
 # Safety Notes
 
 - pls dont hack people with this pls - its only ethical
